@@ -1,7 +1,9 @@
+import { Layout } from './components/Layout/Layout';
+
 function App() {
 	return (
 		<>
-			<div className='p-4'>Invoice app</div>
+			<Layout />
 		</>
 	);
 }
