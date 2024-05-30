@@ -40,11 +40,13 @@ export function Dropdown() {
 				<img
 					src={ArrowDown}
 					alt='Arrow down icon'
-					className='inline-block ml-4'
+					className={`inline-block ml-4 transform ${
+						isOpen ? 'rotate-180' : ''
+					}`}
 				/>
 			</button>
 			{isOpen && (
-				<ul className='absolute top-10 left-0 bg-white shadow-lg w-48 p-6 rounded-lg flex flex-col'>
+				<ul className='absolute top-10 left-1/2 transform -translate-x-1/2 bg-white shadow-lg w-48 px-6 py-4 rounded-lg flex flex-col'>
 					<DropdownItem
 						filter='Draft'
 						handleSelect={handleSelect}
