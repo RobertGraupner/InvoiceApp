@@ -6,7 +6,7 @@ export function DropdownItem({ filter, handleSelect, selectedFilters }) {
 				// checked = true if filter is in selectedFilters
 				checked={selectedFilters.includes(filter)}
 				onChange={() => handleSelect(filter)}
-				className='form-checkbox bg-[#dfe3fa] text-[#7c5dfa] border-transparent focus:ring-transparent hover:border-[#7c5dfa]'
+				className='form-checkbox bg-[#dfe3fa] text-[#7c5dfa] border-transparent rounded-sm focus:ring-transparent hover:border-[#7c5dfa]'
 				id={filter.toLowerCase()}
 			/>
 			<label htmlFor={filter.toLowerCase()} className='cursor-pointer'>
