@@ -4,7 +4,7 @@ import { Dropdown } from '../Dropdown/Dropdown';
 export function TopBar() {
 	return (
 		<div className='flex items-center justify-between'>
-			<div className='space-y-1'>
+			<div className='space-y-1 pl-14'>
 				<h1 className='text-3xl font-bold leading-9 tracking-[-1px]'>
 					Invoices
 				</h1>

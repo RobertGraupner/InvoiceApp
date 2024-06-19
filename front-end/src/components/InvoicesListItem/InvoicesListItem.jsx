@@ -5,17 +5,17 @@ export function InvoicesListItem({
 	invoice: { id, paymentDue, clientName, total, status },
 }) {
 	const statusColors = {
-		paid: {
+		Paid: {
 			bg: 'bg-paid-color',
 			text: 'text-paid-text',
 			dot: 'bg-paid-text',
 		},
-		pending: {
+		Pending: {
 			bg: 'bg-pending-color',
 			text: 'text-pending-text',
 			dot: 'bg-pending-text',
 		},
-		draft: {
+		Draft: {
 			bg: 'bg-draft-color',
 			text: 'text-draft-text',
 			dot: 'bg-draft-text',
@@ -29,7 +29,7 @@ export function InvoicesListItem({
 	} = statusColors[status];
 
 	return (
-		<li className='flex items-center justify-between rounded-lg p-7 bg-white w-full cursor-pointer leading-4 tracking-[-0.25px] border border-transparent hover:border-[#7c5dfa]'>
+		<li className='flex items-center justify-between rounded-lg p-4 bg-white w-full cursor-pointer leading-4 tracking-[-0.25px] border border-transparent hover:border-[#7c5dfa]'>
 			<div className='flex items-center justify-center text-xs  text-[#888eb0] gap-11'>
 				<span>
 					#<span className='font-bold m-0 text-[#0c0e16]'>{id}</span>
@@ -38,7 +38,7 @@ export function InvoicesListItem({
 				<span>{clientName}</span>
 			</div>
 			<div className='flex items-center justify center gap-10'>
-				<span className='text-base font-bold leading-6 tracking-[-0.8px]'>
+				<span className='text-xs font-bold leading-6 tracking-[-0.8px]'>
 					{formatAmount(total)}
 				</span>
 				<div className='flex items-center justify-center'>

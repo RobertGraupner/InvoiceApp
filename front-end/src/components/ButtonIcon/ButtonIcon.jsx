@@ -4,7 +4,7 @@ import plusIcon from '../../assets/icon-plus.svg';
 export function ButtonIcon({ text, bgColor, hoverBgColor, textColor }) {
 	return (
 		<button
-			className={`flex items-center justify-between p-2 ${bgColor} ${textColor} ${hoverBgColor} rounded-3xl text-xs font-bold leading-4 tracking-[-0.25px] w-fit gap-3 pr-4`}>
+			className={`flex items-center justify-between p-2 ${bgColor} ${textColor} ${hoverBgColor} rounded-3xl text-xs font-bold leading-4 tracking-[-0.25px] w-fit gap-4 pr-4`}>
 			<div className='bg-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0'>
 				<img src={plusIcon} alt='Plus icon' />
 			</div>
