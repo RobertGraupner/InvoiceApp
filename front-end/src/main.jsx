@@ -5,8 +5,8 @@ import App from './App.jsx';
 import './styles/globals.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Layout } from './components/Layout/Layout';
-import { InvoicesList } from './views/InvoicesList/InvoicesList';
 import { InvoiceDetails } from './views/InvoiceDetails/InvoiceDetails';
+import { MainPage } from './views/MainPage/MainPage.jsx';
 
 const queryClient = new QueryClient();
 
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: '/',
-				element: <InvoicesList />,
+				element: <MainPage />,
 			},
 			{
 				path: 'invoice/:id',

@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ButtonReturn } from '../../components/ButtonReturn/ButtonReturn';
 import { TopBarDetails } from '../../components/TopBarDetails/TopBarDetails';
 import { StatusBadge } from '../../components/StatusBadge/StatusBadge';
+import { Invoice } from '../../components/Invoice/Invoice';
 
 export function InvoiceDetails() {
 	const { id } = useParams();
@@ -24,6 +25,7 @@ export function InvoiceDetails() {
 			<TopBarDetails>
 				<StatusBadge status={invoice.status} />
 			</TopBarDetails>
+			<Invoice invoice={invoice} />
 		</div>
 	);
 }

@@ -6,7 +6,7 @@ import { Logo } from '../Logo/Logo';
 import { MainContent } from '../MainContent/MainContent';
 import { Sidebar } from '../Sidebar/Sidebar';
 
-export function Layout({ children }) {
+export function Layout() {
 	return (
 		<MainContent>
 			<Sidebar>

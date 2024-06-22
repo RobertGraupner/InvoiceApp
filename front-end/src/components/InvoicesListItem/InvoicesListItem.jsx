@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import arrowRight from '../../assets/icon-arrow-right.svg';
 import { formatAmount } from '../../utils/formatAmount';
+import { formatDate } from '../../utils/formatDate';
 import { StatusBadge } from '../StatusBadge/StatusBadge';
 
 export function InvoicesListItem({
@@ -15,18 +16,18 @@ export function InvoicesListItem({
 
 	return (
 		<li
-			className='flex items-center justify-between rounded-lg p-4 bg-white w-full cursor-pointer leading-4 tracking-[-0.25px] border border-transparent hover:border-[#7c5dfa]'
+			className='flex items-center justify-between gap-10 rounded-lg p-4 bg-white w-full cursor-pointer leading-4 tracking-[-0.25px] border border-transparent hover:border-[#7c5dfa] shadow-md'
 			onClick={handleClick}>
-			<div className='flex items-center justify-center text-xs  text-[#888eb0] gap-11'>
+			<div className='flex items-center justify-center text-xs font-medium tracking-[-0.1px] text-[#7E88C3] gap-11'>
 				<span>
 					#<span className='font-bold m-0 text-[#0c0e16]'>{id}</span>
 				</span>
-				<span>{paymentDue}</span>
+				<span>Due {formatDate(paymentDue)}</span>
 				<span>{clientName}</span>
 			</div>
 			<div className='flex items-center justify center gap-10'>
 				<span className='text-xs font-bold leading-6 tracking-[-0.8px]'>
-					{formatAmount(total)}
+					£ {formatAmount(total)}
 				</span>
 				<div className='flex items-center justify-center'>
 					<StatusBadge status={status} />

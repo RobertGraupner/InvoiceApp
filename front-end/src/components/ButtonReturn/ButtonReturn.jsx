@@ -11,7 +11,7 @@ export function ButtonReturn() {
 				navigate('/');
 			}}>
 			<img src={ArrowLeft} alt='Arrow left icon' />
-			<span className='text-xs ledading-4 tracking-[-0.25px] font-bold mt-1'>
+			<span className='text-xs tracking-[-0.25px] font-bold mt-1 hover:text-[#7E88C3]'>
 				Go back
 			</span>
 		</button>
