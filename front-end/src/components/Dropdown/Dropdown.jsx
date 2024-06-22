@@ -2,9 +2,9 @@ import ArrowDown from '../../assets/icon-arrow-down.svg';
 import { useState, useEffect, useRef } from 'react';
 import { DropdownItem } from '../DropdownItem/DropdownItem';
 
-export function Dropdown() {
+export function Dropdown({ selectedFilters, setSelectedFilters }) {
 	const [isOpen, setIsOpen] = useState(false);
-	const [selectedFilters, setSelectedFilters] = useState([]);
+
 	const dropdownRef = useRef(null);
 
 	const toggleDropdown = () => setIsOpen(!isOpen);

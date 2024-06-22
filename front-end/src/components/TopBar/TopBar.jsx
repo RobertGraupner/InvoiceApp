@@ -1,7 +1,7 @@
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { Dropdown } from '../Dropdown/Dropdown';
 
-export function TopBar() {
+export function TopBar({ totalInvoices, selectedFilters, setSelectedFilters }) {
 	return (
 		<div className='flex items-center justify-between'>
 			<div className='space-y-1 pl-14'>
@@ -9,11 +9,14 @@ export function TopBar() {
 					Invoices
 				</h1>
 				<p className='text-[#888EB0] text-xs leading-4 tracking-[-0.25px]'>
-					There are 7 total invoices
+					There are {totalInvoices} total invoices
 				</p>
 			</div>
 			<div className='flex items-center space-x-8'>
-				<Dropdown />
+				<Dropdown
+					selectedFilters={selectedFilters}
+					setSelectedFilters={setSelectedFilters}
+				/>
 				<ButtonIcon
 					text='New Invoice'
 					bgColor='bg-[#7c5dfa]'
