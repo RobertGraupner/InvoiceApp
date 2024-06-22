@@ -2,7 +2,7 @@ import ArrowDown from '../../assets/icon-arrow-down.svg';
 import { useState, useEffect, useRef } from 'react';
 import { DropdownItem } from '../DropdownItem/DropdownItem';
 
-export function Dropdown({ selectedFilters, setSelectedFilters }) {
+export function Dropdown({ selectedFilters, updateFilters }) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const dropdownRef = useRef(null);
@@ -12,9 +12,9 @@ export function Dropdown({ selectedFilters, setSelectedFilters }) {
 	const handleSelect = (filter) => {
 		if (selectedFilters.includes(filter)) {
 			// remove filter if it's already selected
-			setSelectedFilters(selectedFilters.filter((f) => f !== filter));
+			updateFilters(selectedFilters.filter((f) => f !== filter));
 		} else {
-			setSelectedFilters([...selectedFilters, filter]);
+			updateFilters([...selectedFilters, filter]);
 		}
 	};
 

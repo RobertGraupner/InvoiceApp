@@ -1,32 +1,41 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { InvoicesList } from '../../components/InvoicesList/InvoicesList';
 import { TopBar } from '../../components/TopBar/TopBar';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { BACK_END_URL } from '../../constants/api';
 
 export function MainPage() {
-	const [selectedFilters, setSelectedFilters] = useState([]);
+	const queryClient = useQueryClient();
+
+	const { data: filters = [] } = useQuery({
+		queryKey: ['filters'],
+		queryFn: () => [],
+		initialData: [],
+		staleTime: Infinity,
+	});
+
+	const updateFilters = (newFilters) => {
+		queryClient.setQueryData(['filters'], newFilters);
+	};
 
 	const { data: invoices, isLoading } = useQuery({
 		queryKey: ['invoices'],
-		queryFn: () =>
-			fetch('http://localhost:3000/invoices').then((res) => res.json()),
+		queryFn: () => fetch(BACK_END_URL).then((res) => res.json()),
 	});
-	console.log(invoices);
 
 	if (isLoading) {
 		return <p>Loading...</p>;
 	}
 
 	const filteredInvoices =
-		selectedFilters.length > 0
-			? invoices.filter((invoice) => selectedFilters.includes(invoice.status))
+		filters.length > 0
+			? invoices.filter((invoice) => filters.includes(invoice.status))
 			: invoices;
 
 	return (
 		<>
 			<TopBar
-				selectedFilters={selectedFilters}
-				setSelectedFilters={setSelectedFilters}
+				selectedFilters={filters}
+				updateFilters={updateFilters}
 				totalInvoices={filteredInvoices.length}
 			/>
 			<InvoicesList invoices={filteredInvoices} />
