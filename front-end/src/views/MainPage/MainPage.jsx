@@ -1,9 +1,16 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { InvoicesList } from '../../components/InvoicesList/InvoicesList';
 import { TopBar } from '../../components/TopBar/TopBar';
 import { BACK_END_URL } from '../../constants/api';
+import { InvoiceForm } from '../../components/InvoiceForm/InvoiceForm';
 
 export function MainPage() {
+	const [isInvoiceFormVisible, setIsInvoiceFormVisible] = useState(false);
+
+	const handleOpenForm = () => setIsInvoiceFormVisible(true);
+	const handleCloseForm = () => setIsInvoiceFormVisible(false);
+
 	const queryClient = useQueryClient();
 
 	const { data: filters = [] } = useQuery({
@@ -37,8 +44,10 @@ export function MainPage() {
 				selectedFilters={filters}
 				updateFilters={updateFilters}
 				totalInvoices={filteredInvoices.length}
+				onAddInvoice={handleOpenForm}
 			/>
 			<InvoicesList invoices={filteredInvoices} />
+			<InvoiceForm isVisible={isInvoiceFormVisible} onClose={handleCloseForm} />
 		</>
 	);
 }

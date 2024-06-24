@@ -1,7 +1,12 @@
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { Dropdown } from '../Dropdown/Dropdown';
 
-export function TopBar({ totalInvoices, selectedFilters, updateFilters }) {
+export function TopBar({
+	totalInvoices,
+	selectedFilters,
+	updateFilters,
+	onAddInvoice,
+}) {
 	return (
 		<div className='flex items-center justify-between'>
 			<div className='space-y-1 pl-14'>
@@ -22,6 +27,7 @@ export function TopBar({ totalInvoices, selectedFilters, updateFilters }) {
 					bgColor='bg-[#7c5dfa]'
 					textColor='text-white'
 					hoverBgColor={'hover:bg-[#9277ff]'}
+					onAddInvoice={onAddInvoice}
 				/>
 			</div>
 		</div>
