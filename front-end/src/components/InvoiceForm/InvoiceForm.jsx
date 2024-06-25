@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { Button } from '../Button/Button';
+import { FormInput } from '../FormInput/FormInput';
 
 export function InvoiceForm({
 	isVisible,
@@ -7,13 +8,18 @@ export function InvoiceForm({
 	initialData = {},
 	mode = 'create',
 }) {
-	const { register, handleSubmit, reset } = useForm({
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm({
 		defaultValues: initialData,
+		mode: 'onBlur',
 	});
 
 	const onSubmit = (data) => {
 		console.log(data);
-
 		onClose();
 	};
 
@@ -26,9 +32,111 @@ export function InvoiceForm({
 					<h2 className='text-2xl font-bold tracking-[-0.5px]'>
 						{mode === 'create' ? 'New Invoice' : 'Edit Invoice'}
 					</h2>
-
 					{/* form input container */}
-					<div className=''></div>
+					<div className='flex flex-col mt-11'>
+						<h3 className='font-bold text-[#7C5DFA] tracking-[-0.25px] mb-6'>
+							Bill from
+						</h3>
+						<FormInput
+							label='Street Address'
+							id='streetAddress'
+							register={register}
+							errors={errors}
+							validationRules={{
+								required: `can't be empty`,
+							}}
+						/>
+						<div className='flex gap-6'>
+							<FormInput
+								label='City'
+								id='city'
+								register={register}
+								errors={errors}
+								validationRules={{
+									required: `can't be empty`,
+								}}
+							/>
+							<FormInput
+								label='Post Code'
+								id='postCode'
+								register={register}
+								errors={errors}
+								validationRules={{
+									required: `can't be empty`,
+								}}
+							/>
+							<FormInput
+								label='Country'
+								id='country'
+								register={register}
+								errors={errors}
+								validationRules={{
+									required: `can't be empty`,
+								}}
+							/>
+						</div>
+					</div>
+					<div className='flex flex-col mt-11'>
+						<h3 className='font-bold text-[#7C5DFA] tracking-[-0.25px] mb-6'>
+							Bill to
+						</h3>
+						<FormInput
+							label='Client’s Name'
+							id='clientName'
+							register={register}
+							errors={errors}
+							validationRules={{
+								required: `can't be empty`,
+							}}
+						/>
+						<FormInput
+							label='Client’s Email'
+							id='clientEmail'
+							register={register}
+							errors={errors}
+							validationRules={{
+								required: `can't be empty`,
+							}}
+						/>
+						<FormInput
+							label='Street Address'
+							id='clientStreetAddress'
+							register={register}
+							errors={errors}
+							validationRules={{
+								required: `can't be empty`,
+							}}
+						/>
+						<div className='flex gap-6'>
+							<FormInput
+								label='City'
+								id='clientCity'
+								register={register}
+								errors={errors}
+								validationRules={{
+									required: `can't be empty`,
+								}}
+							/>
+							<FormInput
+								label='Post Code'
+								id='clientPostCode'
+								register={register}
+								errors={errors}
+								validationRules={{
+									required: `can't be empty`,
+								}}
+							/>
+							<FormInput
+								label='Country'
+								id='clientCountry'
+								register={register}
+								errors={errors}
+								validationRules={{
+									required: `can't be empty`,
+								}}
+							/>
+						</div>
+					</div>
 
 					{/* button container */}
 					<div
