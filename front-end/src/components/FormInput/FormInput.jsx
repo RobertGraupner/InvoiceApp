@@ -10,7 +10,7 @@ export function FormInput({
 		<div className='flex flex-col relative mb-6'>
 			<label
 				htmlFor={id}
-				className={`text-xs tracking[-0.1px] mb-2 ${
+				className={`text-xs tracking[-0.1px] leading-[15px] mb-2 ${
 					errors[id] ? 'text-[#EC5757]' : 'text-[#7E88C3]'
 				}`}>
 				{label}

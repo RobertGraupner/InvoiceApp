@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { Button } from '../Button/Button';
 import { FormInput } from '../FormInput/FormInput';
+import { FormSelect } from '../FormSelect/FormSelect';
+import { FormDatePicker } from '../FormDatePicker/FormDatePicker';
 
 export function InvoiceForm({
 	isVisible,
@@ -11,6 +13,7 @@ export function InvoiceForm({
 	const {
 		register,
 		handleSubmit,
+		control,
 		reset,
 		formState: { errors },
 	} = useForm({
@@ -76,6 +79,7 @@ export function InvoiceForm({
 							/>
 						</div>
 					</div>
+
 					<div className='flex flex-col mt-11'>
 						<h3 className='font-bold text-[#7C5DFA] tracking-[-0.25px] mb-6'>
 							Bill to
@@ -129,6 +133,42 @@ export function InvoiceForm({
 							<FormInput
 								label='Country'
 								id='clientCountry'
+								register={register}
+								errors={errors}
+								validationRules={{
+									required: `can't be empty`,
+								}}
+							/>
+						</div>
+
+						<div className='flex flex-col mt-11'>
+							<div className='flex gap-6'>
+								<FormSelect
+									label='Payment Terms'
+									name='paymentTerms'
+									control={control}
+									options={[
+										'Net 1 Day',
+										'Net 7 Days',
+										'Net 14 Days',
+										'Net 30 Days',
+									]}
+									validationRules={{ required: `can't be empty` }}
+								/>
+								<FormDatePicker
+									control={control}
+									id='invoiceDate'
+									label='Invoice Date'
+									errors={errors}
+									validationRules={{
+										required: `can't be empty`,
+									}}
+								/>
+							</div>
+
+							<FormInput
+								label='Project Description'
+								id='projectDescription'
 								register={register}
 								errors={errors}
 								validationRules={{
