@@ -153,13 +153,14 @@ export function InvoiceForm({
 										'Net 14 Days',
 										'Net 30 Days',
 									]}
-									validationRules={{ required: `can't be empty` }}
+									validationRules={{
+										required: `can't be empty`,
+									}}
 								/>
 								<FormDatePicker
 									control={control}
-									id='invoiceDate'
+									name='invoiceDate'
 									label='Invoice Date'
-									errors={errors}
 									validationRules={{
 										required: `can't be empty`,
 									}}
