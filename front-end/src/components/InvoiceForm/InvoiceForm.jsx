@@ -1,8 +1,10 @@
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { Button } from '../Button/Button';
 import { FormInput } from '../FormInput/FormInput';
+import { FormInputItem } from '../FormInputItem/FormInputItem';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormDatePicker } from '../FormDatePicker/FormDatePicker';
+import trash from '../../assets/icon-delete.svg';
 
 export function InvoiceForm({
 	isVisible,
@@ -20,6 +22,16 @@ export function InvoiceForm({
 		defaultValues: initialData,
 		mode: 'onBlur',
 	});
+
+	const { fields, append, remove } = useFieldArray({
+		control,
+		name: 'items',
+	});
+
+	const handleAddNewItem = (e) => {
+		e.preventDefault();
+		append({ name: '', quantity: '', price: '' });
+	};
 
 	const onSubmit = (data) => {
 		console.log(data);
@@ -176,6 +188,88 @@ export function InvoiceForm({
 									required: `can't be empty`,
 								}}
 							/>
+						</div>
+
+						<div className='flex flex-col mt-11'>
+							<h3 className='font-bold text-[#7C5DFA] tracking-[-0.25px] mb-6'>
+								Item List
+							</h3>
+							<div className='hidden md:flex justify-between mb-4'>
+								<label className='text-xs text-[#7E88C3] w-[214px]'>
+									Item Name
+								</label>
+								<label className='text-xs text-[#7E88C3] w-[46px]'>Qty.</label>
+								<label className='text-xs text-[#7E88C3] w-[100px]'>
+									Price
+								</label>
+								<label className='text-xs text-[#7E88C3] w-[56px]'>Total</label>
+								<div className='w-[18px]'></div>
+							</div>
+							{fields.map((field, index) => (
+								<div
+									key={field.id}
+									className='flex flex-col md:flex-row items-center mb-4'>
+									<div className='w-full md:w-[214px] mb-4 md:mb-2 md:mr-4'>
+										<FormInputItem
+											register={register}
+											errors={errors}
+											index={index}
+											id='name'
+											label='Item Name'
+											className='px-5'
+											validationRules={{
+												required: `can't be empty`,
+											}}
+										/>
+									</div>
+									<div className='w-full md:w-[46px] mb-4 md:mb-2 md:mr-4'>
+										<FormInputItem
+											register={register}
+											errors={errors}
+											index={index}
+											id='quantity'
+											label='Qty.'
+											className='text-center px-1'
+											validationRules={{
+												required: `can't be empty`,
+											}}
+										/>
+									</div>
+									<div className='w-full md:w-[100px] mb-4 md:mb-2 md:mr-4'>
+										<FormInputItem
+											register={register}
+											errors={errors}
+											index={index}
+											id='price'
+											label='Price'
+											className='text-center px-1'
+											validationRules={{
+												required: `can't be empty`,
+											}}
+										/>
+									</div>
+									<div className='w-full md:w-[56px] flex items-center justify-between md:mr-4'>
+										<label className='md:hidden text-xs text-[#7E88C3] mr-2'>
+											Total
+										</label>
+										<span className='text-sm'>{/* Calculated sum */}</span>
+									</div>
+									<button
+										type='button'
+										onClick={() => remove(index)}
+										className='mt-4 md:mt-0'>
+										<img src={trash} alt='Delete' />
+									</button>
+								</div>
+							))}
+							<Button
+								onClick={handleAddNewItem}
+								textColor='text-[#7E88C3]'
+								bgColor='bg-[#F9FAFE]'
+								hoverBgColor='hover:bg-[#DFE3FA]'
+								className='w-full'>
+								+ Add New Item
+							</Button>
 						</div>
 					</div>
 

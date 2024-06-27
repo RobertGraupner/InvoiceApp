@@ -13,17 +13,19 @@ export function FormSelect({
 	const dropdownRef = useRef(null);
 	const onBlurRef = useRef(null);
 
-	useEffect(() => {
-		const handleClickOutside = (event) => {
-			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+	const handleClickOutside = (event) => {
+		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+			if (isOpen) {
 				setIsOpen(false);
 				onBlurRef.current?.();
 			}
-		};
+		}
+	};
 
+	useEffect(() => {
 		document.addEventListener('mousedown', handleClickOutside);
 		return () => document.removeEventListener('mousedown', handleClickOutside);
-	}, []);
+	}, [isOpen]);
 
 	return (
 		<div className='flex flex-col relative w-full mb-6' ref={dropdownRef}>

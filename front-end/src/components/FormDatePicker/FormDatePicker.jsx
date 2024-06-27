@@ -38,12 +38,10 @@ export function FormDatePicker({ control, name, label, validationRules = {} }) {
 						<img
 							src={calendarIcon}
 							alt='Calendar'
-							className={`absolute right-4 pointer-events-none ${
-								error ? 'top-[43%]' : 'top-[55%]'
-							}`}
+							className='absolute right-4 pointer-events-none top-[55%]'
 						/>
 						{error && (
-							<span className='text-[#EC5757] text-[10px] mt-1'>
+							<span className='text-[#EC5757] absolute top-[75px] right-0 text-[10px] me-1'>
 								{error.message}
 							</span>
 						)}
