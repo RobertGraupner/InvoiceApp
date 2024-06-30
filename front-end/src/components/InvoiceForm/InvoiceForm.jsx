@@ -1,9 +1,13 @@
 import { useForm, useFieldArray } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '../Button/Button';
 import { FormInput } from '../FormInput/FormInput';
 import { FormInputItem } from '../FormInputItem/FormInputItem';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormDatePicker } from '../FormDatePicker/FormDatePicker';
+import { FormButtons } from '../FormButtons/FormButtons';
+import { BACK_END_URL } from '../../constants/api';
+import { formatInvoiceData } from '../../utils/formatInvoiceData';
 import trash from '../../assets/icon-delete.svg';
 
 export function InvoiceForm({
@@ -12,11 +16,12 @@ export function InvoiceForm({
 	initialData = {},
 	mode = 'create',
 }) {
+	const queryClient = useQueryClient();
+
 	const {
 		register,
-		handleSubmit,
 		control,
-		reset,
+		handleSubmit,
 		formState: { errors },
 	} = useForm({
 		defaultValues: initialData,
@@ -33,16 +38,39 @@ export function InvoiceForm({
 		append({ name: '', quantity: '', price: '' });
 	};
 
+	const addInvoice = useMutation({
+		mutationFn: (newInvoice) =>
+			fetch(BACK_END_URL, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(newInvoice),
+			}).then((res) => res.json()),
+		onSuccess: () => {
+			queryClient.invalidateQueries(['invoices']);
+			onClose();
+		},
+	});
+
 	const onSubmit = (data) => {
-		console.log(data);
-		onClose();
+		const formattedData = formatInvoiceData(data, mode);
+		if (mode === 'create') {
+			addInvoice.mutate(formattedData);
+		} else {
+		}
+	};
+
+	const handleSaveDraft = (e) => {
+		e.preventDefault();
+		console.log('Save as Draft');
 	};
 
 	if (!isVisible) return null;
 
 	return (
 		<div className='fixed inset-0 left-[103px] flex items-start z-50 bg-black bg-opacity-50'>
-			<div className='w-[616px] p-14 h-screen overflow-y-auto rounded-tr-[20px] rounded-br-[20px] bg-white shadow-xl'>
+			<div className='w-[630px] p-14 h-screen overflow-y-auto rounded-tr-[20px] rounded-br-[20px] bg-white shadow-xl'>
 				<form onSubmit={handleSubmit(onSubmit)} className=''>
 					<h2 className='text-2xl font-bold tracking-[-0.5px]'>
 						{mode === 'create' ? 'New Invoice' : 'Edit Invoice'}
@@ -206,9 +234,7 @@ export function InvoiceForm({
 								<div className='w-[18px]'></div>
 							</div>
 							{fields.map((field, index) => (
-								<div
-									key={field.id}
-									className='flex flex-col md:flex-row items-center mb-4'>
+								<div key={field.id} className='flex flex-col md:flex-row mb-4'>
 									<div className='w-full md:w-[214px] mb-4 md:mb-2 md:mr-4'>
 										<FormInputItem
 											register={register}
@@ -230,9 +256,8 @@ export function InvoiceForm({
 											id='quantity'
 											label='Qty.'
 											className='text-center px-1'
-											validationRules={{
-												required: `can't be empty`,
-											}}
+											isNumeric={true}
+											validationRules={{ required: true }}
 										/>
 									</div>
 									<div className='w-full md:w-[100px] mb-4 md:mb-2 md:mr-4'>
@@ -243,21 +268,25 @@ export function InvoiceForm({
 											id='price'
 											label='Price'
 											className='text-center px-1'
-											validationRules={{
-												required: `can't be empty`,
-											}}
+											isNumeric={true}
+											validationRules={{ required: true }}
 										/>
 									</div>
 									<div className='w-full md:w-[56px] flex items-center justify-between md:mr-4'>
 										<label className='md:hidden text-xs text-[#7E88C3] mr-2'>
 											Total
 										</label>
-										<span className='text-sm'>{/* Calculated sum */}</span>
+										<span
+											id={`total-${index}`}
+											className='text-xs text-[#888EB0] font-bold tracking-[-0.25px]'>
+											0.00
+										</span>
 									</div>
+
 									<button
 										type='button'
 										onClick={() => remove(index)}
-										className='mt-4 md:mt-0'>
+										className='mt-4 md:mt-0 ml-auto'>
 										<img src={trash} alt='Delete' />
 									</button>
 								</div>
@@ -274,34 +303,12 @@ export function InvoiceForm({
 					</div>
 
 					{/* button container */}
-					<div
-						className={`flex mt-10 gap-2 ${
-							mode === 'create' ? 'justify-between' : 'justify-end'
-						}`}>
-						<Button
-							onClick={onClose}
-							textColor='text-[#7E88C3]'
-							bgColor='bg-[#F9FAFE]'
-							hoverBgColor='hover:bg-[#DFE3FA]'>
-							Cancel
-						</Button>
-						<div className='flex gap-2'>
-							{mode === 'create' && (
-								<Button
-									textColor='text-[#888EB0]'
-									bgColor='bg-[#373B53]'
-									hoverBgColor='hover:bg-[#0C0E16]'>
-									Save as Draft
-								</Button>
-							)}
-							<Button
-								bgColor='bg-[#7C5DFA]'
-								hoverBgColor='hover:bg-[#9277FF]'
-								textColor='text-white'>
-								{mode === 'create' ? 'Save & Send' : 'Save Changes'}
-							</Button>
-						</div>
-					</div>
+					<FormButtons
+						mode={mode}
+						onClose={onClose}
+						onSaveDraft={() => {}}
+						onSubmit={handleSubmit(onSubmit)}
+					/>
 				</form>
 			</div>
 		</div>

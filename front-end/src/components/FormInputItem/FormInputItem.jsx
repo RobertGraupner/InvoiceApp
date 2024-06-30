@@ -1,3 +1,6 @@
+import { calculateTotalPrice } from '../../utils/calculateTotalPrice';
+import { formatAmount } from '../../utils/formatAmount';
+
 export function FormInputItem({
 	register,
 	errors,
@@ -10,6 +13,22 @@ export function FormInputItem({
 	...rest
 }) {
 	const fieldName = `items.${index}.${id}`;
+
+	const calculateAndUpdateTotal = () => {
+		const quantityInput = document.querySelector(
+			`input[name="items.${index}.quantity"]`
+		);
+		const priceInput = document.querySelector(
+			`input[name="items.${index}.price"]`
+		);
+		const totalSpan = document.querySelector(`#total-${index}`);
+
+		if (quantityInput && priceInput && totalSpan) {
+			const total = calculateTotalPrice(quantityInput.value, priceInput.value);
+			totalSpan.textContent = formatAmount(total);
+		}
+	};
+
 	return (
 		<div className='flex flex-col relative'>
 			<label
@@ -29,10 +48,9 @@ export function FormInputItem({
 				onChange={(e) => {
 					if (isNumeric) {
 						const newValue = e.target.value.replace(/[^0-9.]/g, '');
-						if (newValue === '' || newValue.match(/^\d*\.?\d*$/)) {
-							e.target.value = newValue;
-						}
+						e.target.value = newValue;
 					}
+					calculateAndUpdateTotal();
 				}}
 			/>
 			{errors.items?.[index]?.[id] && (
