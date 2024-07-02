@@ -2,10 +2,10 @@
   "invoices": [
     {
       "id": "RT3080",
-      "createdAt": "2021-08-28",
-      "paymentDue": "2021-09-04",
-      "description": "New project",
-      "paymentTerms": 7,
+      "createdAt": "2021-08-18",
+      "paymentDue": "2021-08-19",
+      "description": "Re-branding",
+      "paymentTerms": 1,
       "clientName": "Jensen Huang",
       "clientEmail": "jensenh@mail.com",
       "status": "Paid",
@@ -25,11 +25,11 @@
         {
           "name": "Brand Guidelines",
           "quantity": 1,
-          "price": 285,
-          "total": 285
+          "price": 1800.9,
+          "total": 1800.9
         }
       ],
-      "total": 285
+      "total": 1800.9
     },
     {
       "id": "XM9141",
@@ -39,7 +39,7 @@
       "paymentTerms": 30,
       "clientName": "Alex Grim",
       "clientEmail": "alexgrim@mail.com",
-      "status": "Paid",
+      "status": "Pending",
       "senderAddress": {
         "street": "19 Union Terrace",
         "city": "London",
@@ -138,7 +138,7 @@
       "paymentTerms": 7,
       "clientName": "Mellisa Clarke",
       "clientEmail": "mellisa.clarke@example.com",
-      "status": "Paid",
+      "status": "Pending",
       "senderAddress": {
         "street": "19 Union Terrace",
         "city": "London",
@@ -175,7 +175,7 @@
       "paymentTerms": 30,
       "clientName": "Thomas Wayne",
       "clientEmail": "thomas@dc.com",
-      "status": "Paid",
+      "status": "Pending",
       "senderAddress": {
         "street": "19 Union Terrace",
         "city": "London",

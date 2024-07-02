@@ -7,9 +7,11 @@ import { StatusBadge } from '../../components/StatusBadge/StatusBadge';
 import { Invoice } from '../../components/Invoice/Invoice';
 import { BACK_END_URL } from '../../constants/api';
 import { InvoiceForm } from '../../components/InvoiceForm/InvoiceForm';
+import { DeleteModal } from '../../components/DeleteModal/DeleteModal';
 
 export function InvoiceDetails() {
 	const [isInvoiceFormVisible, setIsInvoiceFormVisible] = useState(false);
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -37,9 +39,12 @@ export function InvoiceDetails() {
 	});
 
 	const handleDeleteInvoice = () => {
-		if (window.confirm('Are you sure you want to delete this invoice?')) {
-			deleteInvoice.mutate();
-		}
+		setIsDeleteModalOpen(true);
+	};
+
+	const confirmDelete = () => {
+		deleteInvoice.mutate();
+		setIsDeleteModalOpen(false);
 	};
 
 	const markAsPaid = useMutation({
@@ -78,6 +83,12 @@ export function InvoiceDetails() {
 				onClose={handleCloseForm}
 				initialData={invoice}
 				mode='edit'
+			/>
+			<DeleteModal
+				isOpen={isDeleteModalOpen}
+				onClose={() => setIsDeleteModalOpen(false)}
+				onConfirm={confirmDelete}
+				invoiceId={id}
 			/>
 		</div>
 	);
