@@ -22,7 +22,7 @@ export function FormInput({
 						? 'border-[#EC5757] focus:border-[#EC5757]'
 						: 'border-[#DFE3FA] focus:border-[#9277FF]'
 				} focus:ring-0 focus:outline-none`}
-				{...register(id, validationRules)}
+				{...register(id, { ...validationRules })}
 				{...rest}
 			/>
 			{errors[id] && (

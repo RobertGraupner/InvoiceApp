@@ -1,5 +1,6 @@
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { Button } from '../Button/Button';
 import { FormInput } from '../FormInput/FormInput';
 import { FormInputItem } from '../FormInputItem/FormInputItem';
@@ -9,6 +10,13 @@ import { FormButtons } from '../FormButtons/FormButtons';
 import { BACK_END_URL } from '../../constants/api';
 import { formatInvoiceData } from '../../utils/formatInvoiceData';
 import trash from '../../assets/icon-delete.svg';
+
+const paymentTermsMap = {
+	1: 'Net 1 Day',
+	7: 'Net 7 Days',
+	14: 'Net 14 Days',
+	30: 'Net 30 Days',
+};
 
 export function InvoiceForm({
 	isVisible,
@@ -23,10 +31,38 @@ export function InvoiceForm({
 		control,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm({
 		defaultValues: initialData,
 		mode: 'onBlur',
 	});
+
+	useEffect(() => {
+		if (mode === 'edit' && initialData) {
+			reset({
+				id: initialData.id,
+				invoiceDate: new Date(initialData.createdAt),
+				paymentTerms: paymentTermsMap[initialData.paymentTerms],
+				projectDescription: initialData.description,
+				clientName: initialData.clientName,
+				clientEmail: initialData.clientEmail,
+				status: initialData.status,
+				streetAddress: initialData.senderAddress.street,
+				city: initialData.senderAddress.city,
+				postCode: initialData.senderAddress.postCode,
+				country: initialData.senderAddress.country,
+				clientStreetAddress: initialData.clientAddress.street,
+				clientCity: initialData.clientAddress.city,
+				clientPostCode: initialData.clientAddress.postCode,
+				clientCountry: initialData.clientAddress.country,
+				items: initialData.items.map((item) => ({
+					name: item.name,
+					quantity: item.quantity.toString(),
+					price: item.price.toString(),
+				})),
+			});
+		}
+	}, [initialData, mode, reset]);
 
 	const { fields, append, remove } = useFieldArray({
 		control,
@@ -53,12 +89,29 @@ export function InvoiceForm({
 		},
 	});
 
+	const updateInvoice = useMutation({
+		mutationFn: (updatedInvoice) =>
+			fetch(`${BACK_END_URL}/${updatedInvoice.id}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(updatedInvoice),
+			}).then((res) => res.json()),
+		onSuccess: () => {
+			queryClient.invalidateQueries(['invoices']);
+			onClose();
+		},
+	});
+
 	const onSubmit = (data) => {
 		const formattedData = formatInvoiceData(data, mode);
 		if (mode === 'create') {
 			addInvoice.mutate(formattedData);
 		} else {
+			updateInvoice.mutate(formattedData);
 		}
+		reset();
 	};
 
 	const handleSaveDraft = (e) => {
