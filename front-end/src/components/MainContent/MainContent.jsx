@@ -1,6 +1,6 @@
 export function MainContent({ children }) {
 	return (
-		<div className='flex w-full min-h-screen h-full bg-[#f8f8fb]'>
+		<div className='flex min-h-screen w-full flex-col bg-[#f8f8fb] md:flex-row'>
 			{children}
 		</div>
 	);
