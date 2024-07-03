@@ -36,7 +36,8 @@ export function Dropdown({ selectedFilters, updateFilters }) {
 			<button
 				onClick={toggleDropdown}
 				className='text-xs leading-4 tracking-[-0.25px] font-bold'>
-				Filter by status
+				<span className='hidden sm:inline'>Filter by status</span>
+				<span className='inline sm:hidden'>Filter</span>
 				<img
 					src={ArrowDown}
 					alt='Arrow down icon'

@@ -7,7 +7,7 @@ export function Layout() {
 	return (
 		<MainContent>
 			<Sidebar />
-			<div className='mx-14 flex-1 md:mx-5'>
+			<div className='mx-8 flex-1 md:mx-5'>
 				<Container>
 					<Outlet />
 				</Container>

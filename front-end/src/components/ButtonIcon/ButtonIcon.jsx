@@ -3,6 +3,7 @@ import plusIcon from '../../assets/icon-plus.svg';
 // add color using tailwindcss classes
 export function ButtonIcon({
 	text,
+	mobileText,
 	bgColor,
 	hoverBgColor,
 	textColor,
@@ -15,7 +16,8 @@ export function ButtonIcon({
 			<div className='bg-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0'>
 				<img src={plusIcon} alt='Plus icon' />
 			</div>
-			{text}
+			<span className='hidden sm:inline'>{text}</span>
+			<span className='inline sm:hidden'>{mobileText}</span>
 		</button>
 	);
 }

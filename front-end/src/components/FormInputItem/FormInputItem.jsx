@@ -33,7 +33,7 @@ export function FormInputItem({
 		<div className='flex flex-col relative'>
 			<label
 				htmlFor={fieldName}
-				className='md:hidden text-xs text-[#7E88C3] mb-2 block'>
+				className='sm:hidden text-xs text-[#7E88C3] mb-2 block'>
 				{label}
 			</label>
 			<input

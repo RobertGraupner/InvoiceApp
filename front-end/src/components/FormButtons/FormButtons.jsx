@@ -10,7 +10,8 @@ export function FormButtons({ mode, onClose, onSaveDraft, onSubmit }) {
 				onClick={onClose}
 				textColor='text-[#7E88C3]'
 				bgColor='bg-[#F9FAFE]'
-				hoverBgColor='hover:bg-[#DFE3FA]'>
+				hoverBgColor='hover:bg-[#DFE3FA]'
+				className='px-2 sm:px-6'>
 				Cancel
 			</Button>
 			<div className='flex gap-2'>
@@ -19,7 +20,8 @@ export function FormButtons({ mode, onClose, onSaveDraft, onSubmit }) {
 						onClick={onSaveDraft}
 						textColor='text-[#888EB0]'
 						bgColor='bg-[#373B53]'
-						hoverBgColor='hover:bg-[#0C0E16]'>
+						hoverBgColor='hover:bg-[#0C0E16]'
+						className='px-2 sm:px-6'>
 						Save as Draft
 					</Button>
 				)}
@@ -27,7 +29,8 @@ export function FormButtons({ mode, onClose, onSaveDraft, onSubmit }) {
 					onClick={onSubmit}
 					bgColor='bg-[#7C5DFA]'
 					hoverBgColor='hover:bg-[#9277FF]'
-					textColor='text-white'>
+					textColor='text-white'
+					className='px-2 sm:px-6'>
 					{mode === 'create' ? 'Save & Send' : 'Save Changes'}
 				</Button>
 			</div>

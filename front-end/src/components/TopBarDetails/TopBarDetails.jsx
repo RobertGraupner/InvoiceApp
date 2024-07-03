@@ -1,4 +1,4 @@
-import { Button } from '../Button/Button';
+import { InvoiceActionButtons } from '../InvoiceActionButtons/InvoiceActionButtons';
 
 export function TopBarDetails({
 	children,
@@ -8,37 +8,20 @@ export function TopBarDetails({
 	status,
 }) {
 	return (
-		<div className='flex items-center justify-between rounded-lg py-5 px-8 bg-white w-full tracking-[-0.25px] border border-transparent mt-8 mb-6 shadow-md'>
-			<div className='flex items-center gap-5'>
-				<p className='leading-4 tracking-widest font-medium text-xs text-[#858BB2]'>
+		<div className='mb-6 mt-8 flex w-full items-center justify-between rounded-lg border border-transparent bg-white px-8 py-5 tracking-[-0.25px] shadow-md'>
+			<div className='flex w-full items-center justify-between gap-5 sm:w-auto sm:justify-start'>
+				<p className='text-xs font-medium leading-4 tracking-widest text-[#858BB2]'>
 					Status
 				</p>
 				{children}
 			</div>
-			<div className='flex gap-2'>
-				<Button
-					bgColor='bg-[#F9FAFE]'
-					hoverBgColor='hover:bg-[#DFE3FA]'
-					textColor='text-[#7E88C3]'
-					onClick={onEditInvoice}>
-					Edit
-				</Button>
-				<Button
-					bgColor='bg-[#EC5757]'
-					hoverBgColor='hover:bg-[#FF9797]'
-					textColor='text-white'
-					onClick={onDeleteInvoice}>
-					Delete
-				</Button>
-				{status !== 'Paid' && (
-					<Button
-						bgColor='bg-[#7C5DFA]'
-						hoverBgColor='hover:bg-[#9277FF]'
-						textColor='text-white'
-						onClick={onMarkAsPaid}>
-						Mark as Paid
-					</Button>
-				)}
+			<div className='hidden sm:block'>
+				<InvoiceActionButtons
+					onEditInvoice={onEditInvoice}
+					onDeleteInvoice={onDeleteInvoice}
+					onMarkAsPaid={onMarkAsPaid}
+					status={status}
+				/>
 			</div>
 		</div>
 	);

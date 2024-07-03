@@ -8,6 +8,7 @@ import { Invoice } from '../../components/Invoice/Invoice';
 import { BACK_END_URL } from '../../constants/api';
 import { InvoiceForm } from '../../components/InvoiceForm/InvoiceForm';
 import { DeleteModal } from '../../components/DeleteModal/DeleteModal';
+import { InvoiceActionButtons } from '../../components/InvoiceActionButtons/InvoiceActionButtons';
 
 export function InvoiceDetails() {
 	const [isInvoiceFormVisible, setIsInvoiceFormVisible] = useState(false);
@@ -84,6 +85,14 @@ export function InvoiceDetails() {
 				initialData={invoice}
 				mode='edit'
 			/>
+			<div className='sm:hidden'>
+				<InvoiceActionButtons
+					onEditInvoice={() => handleEditInvoice(invoice)}
+					onDeleteInvoice={handleDeleteInvoice}
+					onMarkAsPaid={handleMarkAsPaid}
+					status={invoice.status}
+				/>
+			</div>
 			<DeleteModal
 				isOpen={isDeleteModalOpen}
 				onClose={() => setIsDeleteModalOpen(false)}

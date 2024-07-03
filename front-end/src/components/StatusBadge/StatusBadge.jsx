@@ -25,7 +25,7 @@ export function StatusBadge({ status }) {
 
 	return (
 		<div
-			className={`flex items-center justify-center h-10 w-[104px] gap-2 rounded-md mr-5 ${statusColorBg}`}>
+			className={`flex items-center justify-center h-10 w-[104px] gap-2 rounded-md mr-0 sm:mr-5 ${statusColorBg}`}>
 			<div className={`h-2 w-2 rounded-full ${statusColorDot}`}></div>
 			<span className={`text-xs font-bold ${statusColorText}`}>{status}</span>
 		</div>

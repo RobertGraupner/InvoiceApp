@@ -3,17 +3,17 @@ import { formatDate } from '../../utils/formatDate';
 
 export function Invoice({ invoice }) {
 	return (
-		<div className='bg-white p-12 rounded-lg w-full shadow-md'>
-			<div className='flex justify-between mb-5'>
+		<div className='mb-6 w-full rounded-lg bg-white p-6 shadow-md sm:p-12'>
+			<div className='mb-5 flex flex-col sm:flex-row sm:justify-between'>
 				<div>
-					<h2 className='font-bold text-[15px] text-[#888EB0] mb-2 tracking-[-0.25px]'>
+					<h2 className='mb-2 text-[15px] font-bold tracking-[-0.25px] text-[#888EB0]'>
 						#<span className='text-[#0C0E16]'>{invoice.id}</span>
 					</h2>
-					<p className='text-[#7E88C3] text-xs font-medium tracking-[-0.1px]'>
+					<p className='text-xs font-medium tracking-[-0.1px] text-[#7E88C3]'>
 						{invoice.description}
 					</p>
 				</div>
-				<div className='text-right text-[#7E88C3] text-xs leading-5 tracking-[-0.1px] font-medium'>
+				<div className='pt-4 text-xs font-medium leading-5 tracking-[-0.1px] text-[#7E88C3] sm:pt-0 sm:text-right'>
 					<p>{invoice.senderAddress.street}</p>
 					<p>{invoice.senderAddress.city}</p>
 					<p>{invoice.senderAddress.postCode}</p>
@@ -21,30 +21,30 @@ export function Invoice({ invoice }) {
 				</div>
 			</div>
 
-			<div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-11'>
+			<div className='mb-11 grid grid-cols-2 gap-6 sm:grid-cols-3'>
 				<div className='flex flex-col gap-8'>
 					<div className='flex flex-col gap-3'>
-						<p className='text-[#7E88C3] text-xs font-medium tracking-[-0.1px]'>
+						<p className='text-xs font-medium tracking-[-0.1px] text-[#7E88C3]'>
 							Invoice Date
 						</p>
-						<p className='font-bold text-[15px]'>
+						<p className='text-[15px] font-bold'>
 							{formatDate(invoice.createdAt)}
 						</p>
 					</div>
 					<div className='flex flex-col gap-3'>
-						<p className='text-[#7E88C3] text-xs font-medium tracking-[-0.1px]'>
+						<p className='text-xs font-medium tracking-[-0.1px] text-[#7E88C3]'>
 							Payment Due
 						</p>
-						<p className='font-bold text-[15px]'>
+						<p className='text-[15px] font-bold'>
 							{formatDate(invoice.paymentDue)}
 						</p>
 					</div>
 				</div>
 
-				<div className='flex flex-col gap-3 text-[#7E88C3] text-xs font-medium leading-5 tracking-[-0.1px]'>
+				<div className='flex flex-col gap-3 text-xs font-medium leading-5 tracking-[-0.1px] text-[#7E88C3]'>
 					<p>Bill To</p>
 					<div>
-						<p className='font-bold mb-2 text-[#0C0E16] text-[15px] tracking-[-0.25px]'>
+						<p className='mb-2 text-[15px] font-bold tracking-[-0.25px] text-[#0C0E16]'>
 							{invoice.clientName}
 						</p>
 						<p>{invoice.clientAddress.street}</p>
@@ -54,45 +54,45 @@ export function Invoice({ invoice }) {
 					</div>
 				</div>
 
-				<div className='flex flex-col gap-3 text-[#7E88C3] text-xs font-medium leading-5 tracking-[-0.1px]'>
+				<div className='col-span-2 flex flex-col gap-3 text-xs font-medium leading-5 tracking-[-0.1px] text-[#7E88C3] sm:col-span-1'>
 					<p className=''>Sent to</p>
-					<p className='font-bold mb-2 text-[#0C0E16] text-[15px] break-words'>
+					<p className='mb-2 break-words text-[15px] font-bold text-[#0C0E16]'>
 						{invoice.clientEmail || '---'}
 					</p>
 				</div>
 			</div>
 
-			<div className='bg-[#F9FAFE] rounded-t-lg overflow-hidden p-8 flex flex-col gap-6'>
-				<div className='hidden md:grid grid-cols-2 md:grid-cols-5 text-[#7E88C3] text-xs font-medium tracking-[-0.1px]'>
-					<div className='text-left md:col-span-2'>Item Name</div>
-					<div className='hidden md:block text-center'>QTY.</div>
-					<div className='hidden md:block text-right'>Price</div>
+			<div className='flex flex-col gap-6 overflow-hidden rounded-t-lg bg-[#F9FAFE] p-8'>
+				<div className='hidden grid-cols-2 text-xs font-medium tracking-[-0.1px] text-[#7E88C3] sm:grid sm:grid-cols-5'>
+					<div className='text-left sm:col-span-2'>Item Name</div>
+					<div className='hidden text-center sm:block'>QTY.</div>
+					<div className='hidden text-right sm:block'>Price</div>
 					<div className='text-right'>Total</div>
 				</div>
 				{invoice.items.map((item, index) => (
 					<div
 						key={index}
-						className='grid grid-cols-2 md:grid-cols-5 font-bold  text-[#7E88C3] text-xs tracking-[-0.25px]'>
-						<div className='text-[#0C0E16] md:col-span-2'>
+						className='grid grid-cols-2 text-xs font-bold  tracking-[-0.25px] text-[#7E88C3] sm:grid-cols-5'>
+						<div className='text-[#0C0E16] sm:col-span-2'>
 							{item.name}
-							<div className='md:hidden mt-1'>
+							<div className='mt-1 text-[#7E88C3] sm:hidden'>
 								{item.quantity} x £{formatAmount(item.price)}
 							</div>
 						</div>
-						<div className='hidden md:block text-center'>{item.quantity}</div>
-						<div className='hidden md:block text-right'>
+						<div className='hidden text-center sm:block'>{item.quantity}</div>
+						<div className='hidden text-right sm:block'>
 							£ {formatAmount(item.price)}
 						</div>
-						<div className='text-right text-[#0C0E16]'>
+						<div className='flex items-center justify-end text-right text-[#0C0E16] sm:block'>
 							£ {formatAmount(item.total)}
 						</div>
 					</div>
 				))}
 			</div>
 
-			<div className='bg-[#373B53] text-white rounded-b-lg flex justify-between items-center p-8'>
+			<div className='flex items-center justify-between rounded-b-lg bg-[#373B53] p-8 text-white'>
 				<p className='text-xs font-medium tracking-[-0.1px]'>Amount Due</p>
-				<p className='text-2xl font-bold tracking-[-0.5px]'>
+				<p className='text-md font-bold tracking-[-0.5px] sm:text-2xl'>
 					£ {formatAmount(invoice.total)}
 				</p>
 			</div>
