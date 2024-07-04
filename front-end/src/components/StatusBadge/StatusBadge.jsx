@@ -11,9 +11,9 @@ export function StatusBadge({ status }) {
 			dot: 'bg-pending-text',
 		},
 		Draft: {
-			bg: 'bg-draft-color',
-			text: 'text-draft-text',
-			dot: 'bg-draft-text',
+			bg: 'bg-draft-color dark:bg-[rgba(223,227,250,0.06)]',
+			text: 'text-draft-text dark:text-[#DFE3FA]',
+			dot: 'bg-draft-text dark:bg-[#DFE3FA]',
 		},
 	};
 

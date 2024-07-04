@@ -16,19 +16,22 @@ export function InvoicesListItem({
 
 	return (
 		<li
-			className='flex flex-col sm:flex-row sm:items-center justify-between rounded-lg p-4 bg-white w-full cursor-pointer leading-4 tracking-[-0.25px] border border-transparent hover:border-[#7c5dfa] shadow-md'
+			className='flex flex-col sm:flex-row sm:items-center justify-between rounded-lg p-4 dark:bg-[#1E2139] bg-white w-full cursor-pointer leading-4 tracking-[-0.25px] border border-transparent hover:border-[#7c5dfa] shadow-md'
 			onClick={handleClick}>
 			<div className='flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start text-xs font-medium tracking-[-0.1px] text-[#7E88C3] gap-4 md:gap-11 mb-2 sm:mb-0'>
-				<span>
-					#<span className='text-[#0c0e16] font-bold'>{id}</span>
+				<span className='dark:text-[#888EB0]'>
+					#
+					<span className='text-[#0c0e16] font-bold dark:text-white'>{id}</span>
 				</span>
-				<span className='order-3 sm:order-none w-full sm:w-auto'>
+				<span className='order-3 sm:order-none w-full sm:w-auto dark:text-[#DFE3FA]'>
 					Due {formatDate(paymentDue)}
 				</span>
-				<span className='text-right sm:text-left'>{clientName}</span>
+				<span className='text-right dark:text-white sm:text-left'>
+					{clientName}
+				</span>
 			</div>
-			<div className='flex items-center justify-between sm:justify-end gap-4 sm:gap-10'>
-				<span className='text-xs font-bold leading-6 tracking-[-0.8px]'>
+			<div className='flex items-center justify-between gap-4 sm:justify-end sm:gap-10'>
+				<span className='text-xs font-bold leading-6 tracking-[-0.8px] dark:text-white'>
 					£ {formatAmount(total)}
 				</span>
 				<div className='flex items-center'>

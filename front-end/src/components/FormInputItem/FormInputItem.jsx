@@ -33,15 +33,15 @@ export function FormInputItem({
 		<div className='flex flex-col relative'>
 			<label
 				htmlFor={fieldName}
-				className='sm:hidden text-xs text-[#7E88C3] mb-2 block'>
+				className='mb-2 block text-xs text-[#7E88C3] dark:text-[#DFE3FA] sm:hidden'>
 				{label}
 			</label>
 			<input
 				id={fieldName}
-				className={`border border-solid focus:ring-0 focus:outline-none flex-1 min-w-0 rounded font-bold w-full text-[#0C0E16] text-xs leading-[14px] tracking-[-0.25px] pt-[17px] pb-[15px] ${className} ${
+				className={`w-full min-w-0 flex-1 rounded border border-solid pb-[15px] pt-[17px] text-xs font-bold leading-[14px] tracking-[-0.25px] text-[#0C0E16] focus:outline-none focus:ring-0 dark:bg-[#1E2139] dark:text-white ${className} ${
 					errors.items?.[index]?.[id]
-						? 'border-[#EC5757] focus:border-[#EC5757]'
-						: 'border-[#DFE3FA] focus:border-[#9277FF]'
+						? 'border-[#EC5757] focus:border-[#EC5757] dark:border-[#FF6B6B] dark:focus:border-[#FF6B6B]'
+						: 'border-[#DFE3FA] focus:border-[#9277FF] dark:border-[#1E2139] dark:focus:border-[#7C5DFA]'
 				} focus:ring-0 focus:outline-none`}
 				{...register(fieldName, validationRules)}
 				{...rest}
@@ -54,7 +54,7 @@ export function FormInputItem({
 				}}
 			/>
 			{errors.items?.[index]?.[id] && (
-				<span className='absolute top-[52px] right-0 text-[#EC5757] text-[10px] me-1'>
+				<span className='absolute right-0 top-[52px] me-1 text-[10px] text-[#EC5757] dark:text-[#EC5757]'>
 					{errors.items[index][id].message}
 				</span>
 			)}

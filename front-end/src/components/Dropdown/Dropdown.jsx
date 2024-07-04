@@ -35,7 +35,7 @@ export function Dropdown({ selectedFilters, updateFilters }) {
 		<div className='relative' ref={dropdownRef}>
 			<button
 				onClick={toggleDropdown}
-				className='text-xs leading-4 tracking-[-0.25px] font-bold'>
+				className='text-xs font-bold leading-4 tracking-[-0.25px] dark:text-white'>
 				<span className='hidden sm:inline'>Filter by status</span>
 				<span className='inline sm:hidden'>Filter</span>
 				<img
@@ -47,7 +47,7 @@ export function Dropdown({ selectedFilters, updateFilters }) {
 				/>
 			</button>
 			{isOpen && (
-				<ul className='absolute top-10 left-1/2 transform -translate-x-1/2 bg-white shadow-lg w-48 px-6 py-4 rounded-lg flex flex-col'>
+				<ul className='absolute left-1/2 top-10 flex w-48 -translate-x-1/2 transform flex-col rounded-lg bg-white px-6 py-4 shadow-lg dark:bg-[#1E2139]'>
 					<DropdownItem
 						filter='Draft'
 						handleSelect={handleSelect}

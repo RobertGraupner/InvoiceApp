@@ -4,6 +4,7 @@ import { InvoicesList } from '../../components/InvoicesList/InvoicesList';
 import { TopBar } from '../../components/TopBar/TopBar';
 import { BACK_END_URL } from '../../constants/api';
 import { InvoiceForm } from '../../components/InvoiceForm/InvoiceForm';
+import { NoInvoices } from '../../components/NoInvoices/NoInvoices';
 
 export function MainPage() {
 	const [isInvoiceFormVisible, setIsInvoiceFormVisible] = useState(false);
@@ -46,7 +47,11 @@ export function MainPage() {
 				totalInvoices={filteredInvoices.length}
 				onAddInvoice={handleOpenForm}
 			/>
-			<InvoicesList invoices={filteredInvoices} />
+			{filteredInvoices.length === 0 ? (
+				<NoInvoices />
+			) : (
+				<InvoicesList invoices={filteredInvoices} />
+			)}
 			<InvoiceForm isVisible={isInvoiceFormVisible} onClose={handleCloseForm} />
 		</>
 	);

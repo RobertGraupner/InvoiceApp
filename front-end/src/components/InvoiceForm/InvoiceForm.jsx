@@ -123,11 +123,19 @@ export function InvoiceForm({
 	if (!isVisible) return null;
 
 	return createPortal(
-		<div className='fixed inset-0 md:left-[103px] flex items-start z-50 bg-black bg-opacity-50'>
-			<div className='w-[630px] p-6 sm:p-14 max-h-screen overflow-y-auto scrollbar-hide sm:rounded-tr-[20px] sm:rounded-br-[20px] bg-white shadow-xl'>
-				<form onSubmit={handleSubmit(onSubmit)} className=''>
-					<h2 className='text-2xl font-bold tracking-[-0.5px]'>
-						{mode === 'create' ? 'New Invoice' : 'Edit Invoice'}
+		<div className='fixed inset-0 pt-20 md:pt-0 md:left-[103px] flex items-start z-50 bg-black bg-opacity-50'>
+			<div className='w-[630px] p-6 sm:p-14 max-h-[calc(100vh-80px)] md:min-h-screen overflow-y-auto scrollbar-hide sm:rounded-tr-[20px] sm:rounded-br-[20px] bg-white dark:bg-[#141625] shadow-xl'>
+				<form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
+					<h2 className='text-2xl font-bold tracking-[-0.5px] dark:text-white'>
+						{mode === 'create' ? 'New Invoice' : 'Edit Invoice '}
+						{mode !== 'create' && (
+							<span className='text-[#888EB0]'>
+								#
+								<span className='dark:text-white text-[#0C0E16]'>
+									{initialData.id}
+								</span>
+							</span>
+						)}
 					</h2>
 					{/* form input container */}
 					<div className='flex flex-col mt-11'>
@@ -282,10 +290,18 @@ export function InvoiceForm({
 							</h3>
 
 							<div className='hidden sm:grid sm:grid-cols-[214px_46px_100px_74px_18px] sm:gap-4 mb-4'>
-								<label className='text-xs text-[#7E88C3]'>Item Name</label>
-								<label className='text-xs text-[#7E88C3]'>Qty.</label>
-								<label className='text-xs text-[#7E88C3]'>Price</label>
-								<label className='text-xs text-[#7E88C3]'>Total</label>
+								<label className='text-xs text-[#7E88C3] dark:text-[#DFE3FA]'>
+									Item Name
+								</label>
+								<label className='text-xs text-[#7E88C3] dark:text-[#DFE3FA]'>
+									Qty.
+								</label>
+								<label className='text-xs text-[#7E88C3] dark:text-[#DFE3FA]'>
+									Price
+								</label>
+								<label className='text-xs text-[#7E88C3] dark:text-[#DFE3FA]'>
+									Total
+								</label>
 							</div>
 
 							{fields.map((field, index) => (
@@ -329,14 +345,14 @@ export function InvoiceForm({
 												</label>
 												<span
 													id={`total-${index}`}
-													className='text-xs text-[#888EB0] font-bold tracking-[-0.25px] w-full flex flex-col h-12 justify-center'>
+													className='text-xs text-[#888EB0] dark:text-[#DFE3FA] font-bold tracking-[-0.25px] w-full flex flex-col h-12 justify-center'>
 													0.00
 												</span>
 											</div>
 											<button
 												type='button'
 												onClick={() => remove(index)}
-												className='md:ml-auto flex mt-4 sm:mt-0 sm: mb-1 items-center justify-center'>
+												className='md:ml-auto flex mt-4 sm:mt-0 sm:mb-1 items-center justify-center'>
 												<img src={trash} alt='Delete' />
 											</button>
 										</div>
@@ -348,7 +364,7 @@ export function InvoiceForm({
 								textColor='text-[#7E88C3]'
 								bgColor='bg-[#F9FAFE]'
 								hoverBgColor='hover:bg-[#DFE3FA]'
-								className='w-full'>
+								className='w-full dark:bg-[#252945] dark:text-[#DFE3FA]'>
 								+ Add New Item
 							</Button>
 						</div>

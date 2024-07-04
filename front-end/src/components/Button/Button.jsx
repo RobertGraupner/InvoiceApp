@@ -9,7 +9,7 @@ export function Button({
 }) {
 	return (
 		<button
-			className={`flex items-center justify-center ${bgColor} ${textColor} ${hoverBgColor} ${className} rounded-3xl text-xs font-bold tracking-[-0.25px] w-fit pt-[18px] pb-[15px] px-6`}
+			className={`${bgColor} ${textColor} ${hoverBgColor} ${className} flex w-fit items-center justify-center rounded-3xl pb-[15px] pt-[18px] text-xs font-bold tracking-[-0.25px]`}
 			onClick={onClick}>
 			{children}
 		</button>
