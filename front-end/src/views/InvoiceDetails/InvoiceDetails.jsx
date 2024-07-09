@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ButtonReturn } from '../../components/ButtonReturn/ButtonReturn';
 import { TopBarDetails } from '../../components/TopBarDetails/TopBarDetails';
@@ -9,16 +9,16 @@ import { BACK_END_URL } from '../../constants/api';
 import { InvoiceForm } from '../../components/InvoiceForm/InvoiceForm';
 import { DeleteModal } from '../../components/DeleteModal/DeleteModal';
 import { InvoiceActionButtons } from '../../components/InvoiceActionButtons/InvoiceActionButtons';
+import { useInvoiceMutations } from '../../hooks/useInvoiceMutations';
 
 export function InvoiceDetails() {
 	const [isInvoiceFormVisible, setIsInvoiceFormVisible] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const navigate = useNavigate();
-
-	const queryClient = useQueryClient();
-
+	
 	const { id } = useParams();
+	const { deleteInvoice, markAsPaid } = useInvoiceMutations();
 
 	const { data: invoice, isLoading } = useQuery({
 		queryKey: ['invoice', id],
@@ -26,42 +26,25 @@ export function InvoiceDetails() {
 	});
 
 	const handleCloseForm = () => setIsInvoiceFormVisible(false);
-
-	const handleEditInvoice = () => {
-		setIsInvoiceFormVisible(true);
-	};
-
-	const deleteInvoice = useMutation({
-		mutationFn: () => fetch(`${BACK_END_URL}/${id}`, { method: 'DELETE' }),
-		onSuccess: () => {
-			queryClient.invalidateQueries(['invoices']);
-			navigate('/');
-		},
-	});
-
-	const handleDeleteInvoice = () => {
-		setIsDeleteModalOpen(true);
-	};
+	const handleEditInvoice = () => setIsInvoiceFormVisible(true);
+	const handleDeleteInvoice = () => setIsDeleteModalOpen(true);
 
 	const confirmDelete = () => {
-		deleteInvoice.mutate();
-		setIsDeleteModalOpen(false);
+		deleteInvoice.mutate(id, {
+			onSuccess: () => {
+				setIsDeleteModalOpen(false);
+				navigate('/');
+			},
+		});
 	};
 
-	const markAsPaid = useMutation({
-		mutationFn: () =>
-			fetch(`${BACK_END_URL}/${id}`, {
-				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ status: 'Paid' }),
-			}),
-		onSuccess: () => {
-			queryClient.invalidateQueries(['invoice', id]);
-		},
-	});
-
 	const handleMarkAsPaid = () => {
-		markAsPaid.mutate();
+		markAsPaid.mutate(id, {
+			onSuccess: () => {
+				navigate('/');
+			},
+		}
+		);
 	};
 
 	if (isLoading) {
@@ -72,7 +55,7 @@ export function InvoiceDetails() {
 		<div>
 			<ButtonReturn />
 			<TopBarDetails
-				onEditInvoice={() => handleEditInvoice(invoice)}
+				onEditInvoice={handleEditInvoice}
 				onDeleteInvoice={handleDeleteInvoice}
 				onMarkAsPaid={handleMarkAsPaid}
 				status={invoice.status}>
@@ -87,7 +70,7 @@ export function InvoiceDetails() {
 			/>
 			<div className='sm:hidden'>
 				<InvoiceActionButtons
-					onEditInvoice={() => handleEditInvoice(invoice)}
+					onEditInvoice={handleEditInvoice}
 					onDeleteInvoice={handleDeleteInvoice}
 					onMarkAsPaid={handleMarkAsPaid}
 					status={invoice.status}

@@ -18,6 +18,7 @@ export function FormButtons({ mode, onClose, onSaveDraft, onSubmit }) {
 				{mode === 'create' && (
 					<Button
 						onClick={onSaveDraft}
+						type='button'
 						textColor='text-[#888EB0] dark:text-[#DFE3FA]'
 						bgColor='bg-[#373B53]'
 						hoverBgColor='hover:bg-[#0C0E16] dark:hover:bg-[#1E2139]'

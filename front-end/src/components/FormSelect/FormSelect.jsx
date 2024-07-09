@@ -2,30 +2,27 @@ import { useState, useRef, useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import ArrowDown from '../../assets/icon-arrow-down.svg';
 
-export function FormSelect({
-	label,
-	name,
-	control,
-	options,
-	validationRules = {},
-}) {
+const paymentTermsOptions = [
+	{ value: 1, label: 'Net 1 Day' },
+	{ value: 7, label: 'Net 7 Days' },
+	{ value: 14, label: 'Net 14 Days' },
+	{ value: 30, label: 'Net 30 Days' },
+];
+
+export function FormSelect({ label, name, control, validationRules = {} }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const dropdownRef = useRef(null);
-	const onBlurRef = useRef(null);
-
-	const handleClickOutside = (event) => {
-		if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-			if (isOpen) {
-				setIsOpen(false);
-				onBlurRef.current?.();
-			}
-		}
-	};
 
 	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+				setIsOpen(false);
+			}
+		};
+
 		document.addEventListener('mousedown', handleClickOutside);
 		return () => document.removeEventListener('mousedown', handleClickOutside);
-	}, [isOpen]);
+	}, []);
 
 	return (
 		<div className='flex flex-col relative w-full mb-6' ref={dropdownRef}>
@@ -37,7 +34,14 @@ export function FormSelect({
 					field: { onChange, value, onBlur },
 					fieldState: { error },
 				}) => {
-					onBlurRef.current = onBlur;
+					const selectedOption =
+						paymentTermsOptions.find((option) => option.value === value) || '';
+
+					const handleOptionClick = (option) => {
+						onChange(option.value);
+						setIsOpen(false);
+						onBlur();
+					};
 
 					return (
 						<>
@@ -45,7 +49,7 @@ export function FormSelect({
 								htmlFor={name}
 								className={`text-xs tracking[-0.1px] leading-[15px] mb-2 ${
 									error
-										? 'text-[#EC5757] dark:text-[#FF6B6B'
+										? 'text-[#EC5757] dark:text-[#FF6B6B]'
 										: 'text-[#7E88C3] dark:text-[#DFE3FA]'
 								}`}>
 								{label}
@@ -60,7 +64,7 @@ export function FormSelect({
 								}`}
 								onClick={() => setIsOpen(!isOpen)}>
 								<div className='box-border flex h-12 w-full items-center justify-between border-0 px-5 pb-[15px] pt-[17px] text-xs font-bold leading-[14px] tracking-[-0.25px] text-[#0C0E16] dark:text-white'>
-									<span>{value}</span>
+									<span>{selectedOption.label}</span>
 									<img
 										src={ArrowDown}
 										alt='Arrow down'
@@ -71,16 +75,12 @@ export function FormSelect({
 								</div>
 								{isOpen && (
 									<ul className='absolute left-0 top-full z-10 mt-6 w-full rounded border border-[#DFE3FA] bg-white shadow-lg dark:border-transparent dark:bg-[#252945]'>
-										{options.map((option) => (
+										{paymentTermsOptions.map((option) => (
 											<li
-												key={option}
+												key={option.value}
 												className='cursor-pointer border-b border-[#DFE3FA] px-5 py-3 text-xs font-bold text-[#0C0E16] last:border-b-0 hover:bg-[#F9FAFE] dark:border-[#1E2139] dark:text-white dark:hover:bg-transparent dark:hover:text-[#9277FF]'
-												onClick={() => {
-													onChange(option);
-													setIsOpen(false);
-													onBlur();
-												}}>
-												{option}
+												onClick={() => handleOptionClick(option)}>
+												{option.label}
 											</li>
 										))}
 									</ul>

@@ -9,8 +9,9 @@ export function DarkModeToggle() {
 		<div className='flex w-full items-center justify-end md:h-[100px] md:justify-center'>
 			<button onClick={toggleDarkMode}>
 				<img
-					src={isDarkMode ? sun : moon}
-					alt={isDarkMode ? 'Light mode' : 'Dark mode'}
+				  src={isDarkMode ? sun : moon}
+				  alt={isDarkMode ? 'Light mode' : 'Dark mode'}
+				  title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
 				/>
 			</button>
 		</div>

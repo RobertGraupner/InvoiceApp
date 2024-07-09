@@ -1,23 +1,15 @@
 import { useForm, useFieldArray } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { Button } from '../Button/Button';
 import { FormInput } from '../FormInput/FormInput';
 import { FormInputItem } from '../FormInputItem/FormInputItem';
 import { FormSelect } from '../FormSelect/FormSelect';
 import { FormDatePicker } from '../FormDatePicker/FormDatePicker';
 import { FormButtons } from '../FormButtons/FormButtons';
-import { BACK_END_URL } from '../../constants/api';
+import { FormAddress } from '../FormAddress/FormAddress';
+import { useInvoiceMutations } from '../../hooks/useInvoiceMutations';
 import { formatInvoiceData } from '../../utils/formatInvoiceData';
 import { createPortal } from 'react-dom';
 import trash from '../../assets/icon-delete.svg';
-
-const paymentTermsMap = {
-	1: 'Net 1 Day',
-	7: 'Net 7 Days',
-	14: 'Net 14 Days',
-	30: 'Net 30 Days',
-};
 
 export function InvoiceForm({
 	isVisible,
@@ -25,99 +17,85 @@ export function InvoiceForm({
 	initialData = {},
 	mode = 'create',
 }) {
-	const queryClient = useQueryClient();
-
 	const {
 		register,
 		control,
 		handleSubmit,
 		formState: { errors },
 		reset,
+		getValues,
 	} = useForm({
-		defaultValues: initialData,
-		mode: 'onBlur',
+		defaultValues:
+			mode === 'edit'
+				? {
+						id: initialData.id,
+						invoiceDate: new Date(initialData.createdAt),
+						paymentTerms: initialData.paymentTerms,
+						projectDescription: initialData.description,
+						clientName: initialData.clientName,
+						clientEmail: initialData.clientEmail,
+						status: initialData.status,
+						streetAddress: initialData.senderAddress?.street,
+						city: initialData.senderAddress?.city,
+						postCode: initialData.senderAddress?.postCode,
+						country: initialData.senderAddress?.country,
+						clientStreetAddress: initialData.clientAddress?.street,
+						clientCity: initialData.clientAddress?.city,
+						clientPostCode: initialData.clientAddress?.postCode,
+						clientCountry: initialData.clientAddress?.country,
+						items: initialData.items?.map((item) => ({
+							name: item.name,
+							quantity: item.quantity.toString(),
+							price: item.price.toString(),
+						})) || [{ name: '', quantity: '', price: '' }],
+				  }
+				: {
+						items: [{ name: '', quantity: '', price: '' }],
+				  },
 	});
-
-	useEffect(() => {
-		if (mode === 'edit' && initialData) {
-			reset({
-				id: initialData.id,
-				invoiceDate: new Date(initialData.createdAt),
-				paymentTerms: paymentTermsMap[initialData.paymentTerms],
-				projectDescription: initialData.description,
-				clientName: initialData.clientName,
-				clientEmail: initialData.clientEmail,
-				status: initialData.status,
-				streetAddress: initialData.senderAddress.street,
-				city: initialData.senderAddress.city,
-				postCode: initialData.senderAddress.postCode,
-				country: initialData.senderAddress.country,
-				clientStreetAddress: initialData.clientAddress.street,
-				clientCity: initialData.clientAddress.city,
-				clientPostCode: initialData.clientAddress.postCode,
-				clientCountry: initialData.clientAddress.country,
-				items: initialData.items.map((item) => ({
-					name: item.name,
-					quantity: item.quantity.toString(),
-					price: item.price.toString(),
-				})),
-			});
-		}
-	}, [initialData, mode, reset]);
 
 	const { fields, append, remove } = useFieldArray({
 		control,
 		name: 'items',
 	});
 
+	const { addInvoice, updateInvoice } = useInvoiceMutations();
+
 	const handleAddNewItem = (e) => {
 		e.preventDefault();
 		append({ name: '', quantity: '', price: '' });
 	};
 
-	const addInvoice = useMutation({
-		mutationFn: (newInvoice) =>
-			fetch(BACK_END_URL, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(newInvoice),
-			}).then((res) => res.json()),
-		onSuccess: () => {
-			queryClient.invalidateQueries(['invoices']);
-			onClose();
-		},
-	});
-
-	const updateInvoice = useMutation({
-		mutationFn: (updatedInvoice) =>
-			fetch(`${BACK_END_URL}/${updatedInvoice.id}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(updatedInvoice),
-			}).then((res) => res.json()),
-		onSuccess: () => {
-			queryClient.invalidateQueries(['invoices']);
-			onClose();
-		},
-	});
-
 	const onSubmit = (data) => {
-		const formattedData = formatInvoiceData(data, mode);
+		const formattedData = formatInvoiceData(data, mode, false);
+
 		if (mode === 'create') {
-			addInvoice.mutate(formattedData);
+			addInvoice.mutate(formattedData, {
+				onSuccess: () => {
+					reset();
+					onClose();
+				},
+			});
 		} else {
-			updateInvoice.mutate(formattedData);
+			updateInvoice.mutate(formattedData, {
+				onSuccess: () => {
+					reset();
+					onClose();
+				},
+			});
 		}
-		reset();
 	};
 
-	const handleSaveDraft = (e) => {
-		e.preventDefault();
-		console.log('Save as Draft');
+	const handleSaveDraft = () => {
+		const values = getValues();
+		const formattedData = formatInvoiceData(values, mode, true);
+
+		addInvoice.mutate(formattedData, {
+			onSuccess: () => {
+				reset();
+				onClose();
+			},
+		});
 	};
 
 	if (!isVisible) return null;
@@ -137,53 +115,19 @@ export function InvoiceForm({
 							</span>
 						)}
 					</h2>
-					{/* form input container */}
 					<div className='flex flex-col mt-11'>
 						<h3 className='font-bold text-[#7C5DFA] tracking-[-0.25px] mb-6'>
 							Bill from
 						</h3>
-						<FormInput
-							label='Street Address'
-							id='streetAddress'
+						<FormAddress
 							register={register}
 							errors={errors}
-							validationRules={{
-								required: `can't be empty`,
-							}}
+							streetAddressId='streetAddress'
+							cityId='city'
+							postCodeId='postCode'
+							countryId='country'
 						/>
-						<div className='flex flex-col sm:flex-row sm:gap-6'>
-							<div className='flex gap-6'>
-								<FormInput
-									label='City'
-									id='city'
-									register={register}
-									errors={errors}
-									validationRules={{
-										required: `can't be empty`,
-									}}
-								/>
-								<FormInput
-									label='Post Code'
-									id='postCode'
-									register={register}
-									errors={errors}
-									validationRules={{
-										required: `can't be empty`,
-									}}
-								/>
-							</div>
-							<FormInput
-								label='Country'
-								id='country'
-								register={register}
-								errors={errors}
-								validationRules={{
-									required: `can't be empty`,
-								}}
-							/>
-						</div>
 					</div>
-
 					<div className='flex flex-col mt-4 ms:mt-11'>
 						<h3 className='font-bold text-[#7C5DFA] tracking-[-0.25px] mb-6'>
 							Bill to
@@ -206,59 +150,20 @@ export function InvoiceForm({
 								required: `can't be empty`,
 							}}
 						/>
-						<FormInput
-							label='Street Address'
-							id='clientStreetAddress'
+						<FormAddress
 							register={register}
 							errors={errors}
-							validationRules={{
-								required: `can't be empty`,
-							}}
+							streetAddressId='clientStreetAddress'
+							cityId='clientCity'
+							postCodeId='clientPostCode'
+							countryId='clientCountry'
 						/>
-						<div className='flex flex-col sm:flex-row sm:gap-6'>
-							<div className='flex gap-6'>
-								<FormInput
-									label='City'
-									id='clientCity'
-									register={register}
-									errors={errors}
-									validationRules={{
-										required: `can't be empty`,
-									}}
-								/>
-								<FormInput
-									label='Post Code'
-									id='clientPostCode'
-									register={register}
-									errors={errors}
-									validationRules={{
-										required: `can't be empty`,
-									}}
-								/>
-							</div>
-							<FormInput
-								label='Country'
-								id='clientCountry'
-								register={register}
-								errors={errors}
-								validationRules={{
-									required: `can't be empty`,
-								}}
-							/>
-						</div>
-
 						<div className='flex flex-col sm:mt-11'>
 							<div className='flex flex-col sm:gap-6'>
 								<FormSelect
 									label='Payment Terms'
 									name='paymentTerms'
 									control={control}
-									options={[
-										'Net 1 Day',
-										'Net 7 Days',
-										'Net 14 Days',
-										'Net 30 Days',
-									]}
 									validationRules={{
 										required: `can't be empty`,
 									}}
@@ -272,7 +177,6 @@ export function InvoiceForm({
 									}}
 								/>
 							</div>
-
 							<FormInput
 								label='Project Description'
 								id='projectDescription'
@@ -288,7 +192,6 @@ export function InvoiceForm({
 							<h3 className='font-bold text-lg text-[#777F98] mb-6'>
 								Item List
 							</h3>
-
 							<div className='hidden sm:grid sm:grid-cols-[214px_46px_100px_74px_18px] sm:gap-4 mb-4'>
 								<label className='text-xs text-[#7E88C3] dark:text-[#DFE3FA]'>
 									Item Name
@@ -369,12 +272,10 @@ export function InvoiceForm({
 							</Button>
 						</div>
 					</div>
-
-					{/* button container */}
 					<FormButtons
 						mode={mode}
 						onClose={onClose}
-						onSaveDraft={() => {}}
+						onSaveDraft={handleSaveDraft}
 						onSubmit={handleSubmit(onSubmit)}
 					/>
 				</form>

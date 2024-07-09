@@ -70,7 +70,7 @@ export function Invoice({ invoice }) {
 					<div className='hidden text-right sm:block'>Price</div>
 					<div className='text-right'>Total</div>
 				</div>
-				{invoice.items.map((item, index) => (
+				{invoice.items?.map((item, index) => (
 					<div
 						key={index}
 						className='grid grid-cols-2 text-xs font-bold  tracking-[-0.25px] text-[#7E88C3] dark:text-[#DFE3FA] sm:grid-cols-5'>
