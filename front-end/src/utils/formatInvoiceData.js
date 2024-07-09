@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-export function formatInvoiceData(values, mode, isDraft = false) {
+export function formatInvoiceData(values, mode, isDraft) {
 	return {
 		...(mode === 'edit'
 			? { id: values.id }

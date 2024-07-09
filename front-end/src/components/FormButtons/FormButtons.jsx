@@ -1,13 +1,16 @@
 import { Button } from '../Button/Button';
 
-export function FormButtons({ mode, onClose, onSaveDraft, onSubmit }) {
+export function FormButtons({ mode, onClose, onSaveDraft, onSubmit, reset }) {
 	return (
 		<div
 			className={`flex mt-10 gap-2 ${
 				mode === 'create' ? 'justify-between' : 'justify-end'
 			}`}>
 			<Button
-				onClick={onClose}
+				onClick={() => {
+					reset();
+					onClose();
+				}}
 				textColor='text-[#7E88C3] dark:text-[#DFE3FA] dark:hover:text-[#7E88C3]'
 				bgColor='bg-[#F9FAFE] dark:bg-[#252945]'
 				hoverBgColor='hover:bg-[#DFE3FA] dark:hover:bg-white'

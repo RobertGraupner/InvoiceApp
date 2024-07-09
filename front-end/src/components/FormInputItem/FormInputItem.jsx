@@ -1,7 +1,10 @@
-import { calculateTotalPrice } from '../../utils/calculateTotalPrice';
+import { useWatch } from 'react-hook-form';
 import { formatAmount } from '../../utils/formatAmount';
+import { calculateTotalPrice } from '../../utils/calculateTotalPrice';
+import { useEffect } from 'react';
 
 export function FormInputItem({
+	control,
 	register,
 	errors,
 	index,
@@ -10,24 +13,28 @@ export function FormInputItem({
 	className = '',
 	validationRules = {},
 	isNumeric = false,
+	onTotalChange = false,
 	...rest
 }) {
 	const fieldName = `items.${index}.${id}`;
 
-	const calculateAndUpdateTotal = () => {
-		const quantityInput = document.querySelector(
-			`input[name="items.${index}.quantity"]`
-		);
-		const priceInput = document.querySelector(
-			`input[name="items.${index}.price"]`
-		);
-		const totalSpan = document.querySelector(`#total-${index}`);
+	const quantity = useWatch({
+		// we need control to watch the form state
+		control,
+		name: `items.${index}.quantity`,
+	});
 
-		if (quantityInput && priceInput && totalSpan) {
-			const total = calculateTotalPrice(quantityInput.value, priceInput.value);
-			totalSpan.textContent = formatAmount(total);
+	const price = useWatch({
+		control,
+		name: `items.${index}.price`,
+	});
+
+	useEffect(() => {
+		if (id === 'price' && onTotalChange) {
+			const totalPrice = formatAmount(calculateTotalPrice(quantity, price));
+			onTotalChange(index, totalPrice);
 		}
-	};
+	}, [quantity, price]);
 
 	return (
 		<div className='flex flex-col relative'>
@@ -47,10 +54,10 @@ export function FormInputItem({
 				{...rest}
 				onChange={(e) => {
 					if (isNumeric) {
-						const newValue = e.target.value.replace(/[^0-9.]/g, '');
-						e.target.value = newValue;
+						e.target.value = e.target.value.replace(/[^0-9.]/g, '');
 					}
-					calculateAndUpdateTotal();
+					// we need that register to inform react-hook-form about the change because we have overwritten the onChange event
+					register(fieldName).onChange(e);
 				}}
 			/>
 			{errors.items?.[index]?.[id] && (
