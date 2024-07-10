@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ButtonReturn } from '../../components/ButtonReturn/ButtonReturn';
 import { TopBarDetails } from '../../components/TopBarDetails/TopBarDetails';
 import { StatusBadge } from '../../components/StatusBadge/StatusBadge';
@@ -16,14 +16,34 @@ export function InvoiceDetails() {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const navigate = useNavigate();
-	
+
 	const { id } = useParams();
 	const { deleteInvoice, markAsPaid } = useInvoiceMutations();
 
-	const { data: invoice, isLoading } = useQuery({
+	const {
+		data: invoice,
+		isLoading,
+		isError,
+		error,
+	} = useQuery({
 		queryKey: ['invoice', id],
-		queryFn: () => fetch(`${BACK_END_URL}/${id}`).then((res) => res.json()),
+		queryFn: () =>
+			fetch(`${BACK_END_URL}/${id}`).then((res) => {
+				if (!res.ok) {
+					throw new Error('Invoice not found');
+				}
+				return res.json();
+			}),
+		retry: false,
 	});
+
+	useEffect(() => {
+		if (isError) {
+			console.log('Error:', error.message);
+			// we add replace: true to avoid adding the error page to the history
+			navigate('/', { replace: true });
+		}
+	}, [isError, navigate]);
 
 	const handleCloseForm = () => setIsInvoiceFormVisible(false);
 	const handleEditInvoice = () => setIsInvoiceFormVisible(true);
@@ -43,12 +63,15 @@ export function InvoiceDetails() {
 			onSuccess: () => {
 				navigate('/');
 			},
-		}
-		);
+		});
 	};
 
 	if (isLoading) {
 		return <p>Loading...</p>;
+	}
+
+	if (isError) {
+		return null;
 	}
 
 	return (
