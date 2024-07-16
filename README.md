@@ -1,13 +1,13 @@
 # Invoice App
 
-Invoice App is a web application built using Vite, React, Tailwind CSS, and react-hook-form. This project is created as a practice exercise to improve my skills in React development.
+Invoice App is a web application built using Vite, React, Tailwind CSS, and React Hook Form. This project is created as a practice exercise to improve my skills in React development.
 
 ## Technologies
 - Vite
 - React
 - TailwindCSS
 - Tanstack Query
-- react-hook-form
+- React Hook Form
 - JSON Server
 
 ## Installation
