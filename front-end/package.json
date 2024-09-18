@@ -10,7 +10,8 @@
 		"preview": "vite preview",
 		"test": "vitest",
 		"test:run": "vitest --run",
-		"test:ui": "vitest --ui"
+		"test:ui": "vitest --ui",
+		"start": "vite preview"
 	},
 	"dependencies": {
 		"@tanstack/react-query": "^5.40.0",
