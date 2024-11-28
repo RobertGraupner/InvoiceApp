@@ -1,7 +1,32 @@
 # Invoice App
 
-Invoice App is a web application built using React, Tailwind CSS, and react-hook-form.
+Invoice App is a web application built using React, Tailwind CSS, React Hook Form, Tanstack Query and json-server to mock a REST API.
 This project is created as a practice exercise to improve my skills in React development.
+
+## Demo & Screenshots
+
+### Application Overview
+![Demo](https://imgur.com/a/bOWx0h1)
+*Quick overview of main functionalities*
+
+### Key Features
+
+#### Invoice List
+![Invoice List](docs/invoice-list.png)
+*Main dashboard with invoice filtering and status management*
+
+#### Invoice Details
+![Invoice Details](docs/invoice-details.png)
+*Detailed view with payment status and actions*
+
+#### Edit Invoice
+![Edit Invoice](docs/edit-invoice.png)
+*Intuitive form for editing invoices with item management*
+
+#### Dark Mode
+![Dark Mode](docs/dark-mode.png)
+*Dark mode for improved readability*
+
 
 ## Live Version
 
