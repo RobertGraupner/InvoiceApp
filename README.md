@@ -6,7 +6,7 @@ This project is created as a practice exercise to improve my skills in React dev
 ## Demo & Screenshots
 
 ### Application Overview
-![Demo](https://imgur.com/a/bOWx0h1)
+![Demo](docs/demo.gif)
 *Quick overview of main functionalities*
 
 ### Key Features
