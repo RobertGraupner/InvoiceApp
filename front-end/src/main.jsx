@@ -24,7 +24,7 @@ const router = createBrowserRouter([
 				element: <MainPage />,
 			},
 			{
-				path: 'invoice/:id',
+				path: 'invoice/:invoice_number',
 				element: <InvoiceDetails />,
 			},
 			{

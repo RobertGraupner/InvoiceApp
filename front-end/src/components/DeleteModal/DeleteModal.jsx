@@ -1,7 +1,7 @@
 import { Button } from '../Button/Button';
 import { createPortal } from 'react-dom';
 
-export function DeleteModal({ isOpen, onClose, onConfirm, invoiceId }) {
+export function DeleteModal({ isOpen, onClose, onConfirm, invoiceNumber }) {
 	if (!isOpen) return null;
 
 	return createPortal(
@@ -11,7 +11,7 @@ export function DeleteModal({ isOpen, onClose, onConfirm, invoiceId }) {
 					Confirm Deletion
 				</h2>
 				<p className='mb-3 text-xs font-medium leading-[22px] tracking-[-0.1px] text-[#888EB0] dark:text-[#DFE3FA]'>
-					Are you sure you want to delete invoice #{invoiceId}? This action
+					Are you sure you want to delete invoice #{invoiceNumber}? This action
 					cannot be undone.
 				</p>
 				<div className='flex justify-end gap-2'>

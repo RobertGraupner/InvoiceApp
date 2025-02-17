@@ -27,8 +27,8 @@ export function FormDatePicker({ control, name, label, validationRules = {} }) {
 						</label>
 
 						<DatePicker
-							selected={value}
-							onChange={onChange}
+							selected={value ? new Date(value) : null}
+							onChange={(date) => onChange(date?.toISOString())}
 							dateFormat='dd MMM yyyy'
 							className={`border border-solid focus:ring-0 focus:outline-none flex-1 min-w-0 rounded font-bold w-full text-[#0C0E16] dark:text-white dark:bg-[#1E2139] text-xs leading-[14px] tracking-[-0.25px] px-5 pt-[17px] pb-[15px] ${
 								error

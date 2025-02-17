@@ -3,21 +3,21 @@ import { v4 as uuidv4 } from 'uuid';
 export function formatInvoiceData(values, mode, isDraft) {
 	return {
 		...(mode === 'edit'
-			? { id: values.id }
-			: { id: uuidv4().slice(0, 6).toUpperCase() }),
-		createdAt: values.invoiceDate
+			? { invoice_number: values.invoice_number }
+			: { invoice_number: uuidv4().slice(0, 6).toUpperCase() }),
+		created_at: values.invoiceDate
 			? adjustForTimezone(values.invoiceDate).toISOString().split('T')[0]
 			: adjustForTimezone(new Date()).toISOString().split('T')[0],
-		paymentDue: calculatePaymentDue(
+		payment_due: calculatePaymentDue(
 			values.invoiceDate
 				? adjustForTimezone(values.invoiceDate)
 				: adjustForTimezone(new Date()),
 			values.paymentTerms
 		),
 		description: values.projectDescription || '',
-		paymentTerms: values.paymentTerms || 30,
-		clientName: values.clientName || '',
-		clientEmail: values.clientEmail || '',
+		payment_terms: values.paymentTerms || 30,
+		client_name: values.clientName || '',
+		client_email: values.clientEmail || '',
 		status: isDraft
 			? 'Draft'
 			: mode === 'edit'
@@ -25,13 +25,13 @@ export function formatInvoiceData(values, mode, isDraft) {
 				? 'Pending'
 				: values.status
 			: 'Pending',
-		senderAddress: {
+		sender_address: {
 			street: values.streetAddress || '',
 			city: values.city || '',
 			postCode: values.postCode || '',
 			country: values.country || '',
 		},
-		clientAddress: {
+		client_address: {
 			street: values.clientStreetAddress || '',
 			city: values.clientCity || '',
 			postCode: values.clientPostCode || '',

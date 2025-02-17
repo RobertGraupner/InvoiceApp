@@ -5,13 +5,13 @@ import { formatDate } from '../../utils/formatDate';
 import { StatusBadge } from '../StatusBadge/StatusBadge';
 
 export function InvoicesListItem({
-	invoice: { id, paymentDue, clientName, total, status },
+	invoice: { invoice_number, payment_due, client_name, total, status },
 }) {
 	// hook to navigate to the invoice details page without Link component
 	const navigate = useNavigate();
 
 	const handleClick = () => {
-		navigate(`/invoice/${id}`);
+		navigate(`/invoice/${invoice_number}`);
 	};
 
 	return (
@@ -21,13 +21,15 @@ export function InvoicesListItem({
 			<div className='flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start text-xs font-medium tracking-[-0.1px] text-[#7E88C3] gap-4 md:gap-11 mb-2 sm:mb-0'>
 				<span className='dark:text-[#888EB0]'>
 					#
-					<span className='text-[#0c0e16] font-bold dark:text-white'>{id}</span>
+					<span className='text-[#0c0e16] font-bold dark:text-white'>
+						{invoice_number}
+					</span>
 				</span>
 				<span className='order-3 sm:order-none w-full sm:w-auto dark:text-[#DFE3FA]'>
-					Due {formatDate(paymentDue)}
+					Due {formatDate(payment_due)}
 				</span>
 				<span className='text-right dark:text-white sm:text-left'>
-					{clientName}
+					{client_name}
 				</span>
 			</div>
 			<div className='flex items-center justify-between gap-4 sm:justify-end sm:gap-10'>

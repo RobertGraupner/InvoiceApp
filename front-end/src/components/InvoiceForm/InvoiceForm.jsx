@@ -14,7 +14,18 @@ export function InvoiceForm({
 	onClose,
 	initialData = {},
 	mode = 'create',
+	invoice,
 }) {
+	const defaultValues = {
+		...getDefaultInvoiceValues(mode, initialData),
+		invoiceDate: invoice?.created_at
+			? new Date(invoice.created_at)
+			: new Date(),
+		paymentDue: invoice?.payment_due
+			? new Date(invoice.payment_due)
+			: new Date(),
+	};
+
 	const {
 		register,
 		control,
@@ -23,7 +34,7 @@ export function InvoiceForm({
 		reset,
 		getValues,
 	} = useForm({
-		defaultValues: getDefaultInvoiceValues(mode, initialData),
+		defaultValues,
 	});
 
 	const { fields, append, remove } = useFieldArray({
@@ -81,7 +92,7 @@ export function InvoiceForm({
 							<span className='text-[#888EB0]'>
 								#
 								<span className='dark:text-white text-[#0C0E16]'>
-									{initialData.id}
+									{initialData.invoice_number}
 								</span>
 							</span>
 						)}

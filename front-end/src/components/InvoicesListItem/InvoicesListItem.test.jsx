@@ -15,9 +15,9 @@ vi.mock('react-router-dom', async () => {
 });
 
 const mockInvoice = {
-	id: 'RT3080',
-	paymentDue: '2021-08-19',
-	clientName: 'Jensen Huang',
+	invoice_number: 'RT3080',
+	payment_due: '2021-08-19',
+	client_name: 'Jensen Huang',
 	total: 1800.9,
 	status: 'Paid',
 };

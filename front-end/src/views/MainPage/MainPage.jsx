@@ -5,6 +5,7 @@ import { TopBar } from '../../components/TopBar/TopBar';
 import { BACK_END_URL } from '../../constants/api';
 import { InvoiceForm } from '../../components/InvoiceForm/InvoiceForm';
 import { NoInvoices } from '../../components/NoInvoices/NoInvoices';
+import { supabase } from '../../lib/supabase';
 
 export function MainPage() {
 	const [isInvoiceFormVisible, setIsInvoiceFormVisible] = useState(false);
@@ -27,7 +28,12 @@ export function MainPage() {
 
 	const { data: invoices, isLoading } = useQuery({
 		queryKey: ['invoices'],
-		queryFn: () => fetch(BACK_END_URL).then((res) => res.json()),
+		queryFn: async () => {
+			const { data, error } = await supabase.from('invoices').select('*');
+
+			if (error) throw error;
+			return data;
+		},
 	});
 
 	if (isLoading) {

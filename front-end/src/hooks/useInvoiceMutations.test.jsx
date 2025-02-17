@@ -1,9 +1,29 @@
 import { renderHook, act } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useInvoiceMutations } from './useInvoiceMutations';
+import { vi } from 'vitest';
+import { supabase } from '../lib/supabase';
 
-// mock fetch to avoid making real requests
-global.fetch = vi.fn();
+const mockFrom = {
+	insert: vi.fn().mockReturnThis(),
+	update: vi.fn().mockReturnThis(),
+	delete: vi.fn().mockReturnThis(),
+	select: vi.fn().mockReturnThis(),
+	single: vi
+		.fn()
+		.mockResolvedValue({
+			data: { invoice_number: 'new-invoice' },
+			error: null,
+		}),
+	eq: vi.fn().mockReturnThis(),
+};
+
+// Mock supabase
+vi.mock('../lib/supabase', () => ({
+	supabase: {
+		from: vi.fn(() => mockFrom),
+	},
+}));
 
 // create a wrapper to provide the query client to the hook
 const createWrapper = () => {
@@ -21,61 +41,44 @@ const createWrapper = () => {
 
 describe('useInvoiceMutations', () => {
 	beforeEach(() => {
-		fetch.mockClear();
+		vi.clearAllMocks();
+		mockFrom.single.mockResolvedValue({
+			data: { invoice_number: 'new-invoice' },
+			error: null,
+		});
 	});
 
 	it('should add an invoice', async () => {
-		fetch.mockResolvedValueOnce({
-			ok: true,
-			json: async () => ({ id: 'new-invoice' }),
-		});
-		// renderHook will render the hook outside react component and return its result
 		const { result } = renderHook(() => useInvoiceMutations(), {
 			wrapper: createWrapper(),
 		});
-		// act will run the function that changes the state
+
 		await act(async () => {
-			await result.current.addInvoice.mutateAsync({ id: 'new-invoice' });
+			await result.current.addInvoice.mutateAsync({
+				invoice_number: 'new-invoice',
+			});
 		});
 
-		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith(
-			expect.any(String),
-			expect.objectContaining({
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ id: 'new-invoice' }),
-			})
-		);
+		expect(supabase.from).toHaveBeenCalledWith('invoices');
 	});
 
 	it('should update an invoice', async () => {
-		fetch.mockResolvedValueOnce({
-			ok: true,
-			json: async () => ({ id: 'updated-invoice' }),
-		});
-
 		const { result } = renderHook(() => useInvoiceMutations(), {
 			wrapper: createWrapper(),
 		});
 
 		await act(async () => {
-			await result.current.updateInvoice.mutateAsync({ id: 'updated-invoice' });
+			await result.current.updateInvoice.mutateAsync({
+				invoice_number: 'updated-invoice',
+				status: 'Pending',
+			});
 		});
 
-		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith(
-			expect.stringContaining('updated-invoice'),
-			expect.objectContaining({
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ id: 'updated-invoice' }),
-			})
-		);
+		expect(supabase.from).toHaveBeenCalledWith('invoices');
 	});
 
 	it('should delete an invoice', async () => {
-		fetch.mockResolvedValueOnce({ ok: true });
+		mockFrom.single.mockResolvedValue({ error: null });
 
 		const { result } = renderHook(() => useInvoiceMutations(), {
 			wrapper: createWrapper(),
@@ -85,17 +88,11 @@ describe('useInvoiceMutations', () => {
 			await result.current.deleteInvoice.mutateAsync('invoice-to-delete');
 		});
 
-		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith(
-			expect.stringContaining('invoice-to-delete'),
-			expect.objectContaining({
-				method: 'DELETE',
-			})
-		);
+		expect(supabase.from).toHaveBeenCalledWith('invoices');
 	});
 
 	it('should mark an invoice as paid', async () => {
-		fetch.mockResolvedValueOnce({ ok: true });
+		mockFrom.single.mockResolvedValue({ error: null });
 
 		const { result } = renderHook(() => useInvoiceMutations(), {
 			wrapper: createWrapper(),
@@ -105,14 +102,6 @@ describe('useInvoiceMutations', () => {
 			await result.current.markAsPaid.mutateAsync('invoice-to-pay');
 		});
 
-		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith(
-			expect.stringContaining('invoice-to-pay'),
-			expect.objectContaining({
-				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ status: 'Paid' }),
-			})
-		);
+		expect(supabase.from).toHaveBeenCalledWith('invoices');
 	});
 });

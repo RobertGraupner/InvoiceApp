@@ -5,19 +5,18 @@ import { ButtonReturn } from '../../components/ButtonReturn/ButtonReturn';
 import { TopBarDetails } from '../../components/TopBarDetails/TopBarDetails';
 import { StatusBadge } from '../../components/StatusBadge/StatusBadge';
 import { Invoice } from '../../components/Invoice/Invoice';
-import { BACK_END_URL } from '../../constants/api';
 import { InvoiceForm } from '../../components/InvoiceForm/InvoiceForm';
 import { DeleteModal } from '../../components/DeleteModal/DeleteModal';
 import { InvoiceActionButtons } from '../../components/InvoiceActionButtons/InvoiceActionButtons';
 import { useInvoiceMutations } from '../../hooks/useInvoiceMutations';
+import { supabase } from '../../lib/supabase';
 
 export function InvoiceDetails() {
 	const [isInvoiceFormVisible, setIsInvoiceFormVisible] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const navigate = useNavigate();
-
-	const { id } = useParams();
+	const { invoice_number } = useParams();
 	const { deleteInvoice, markAsPaid } = useInvoiceMutations();
 
 	const {
@@ -26,14 +25,17 @@ export function InvoiceDetails() {
 		isError,
 		error,
 	} = useQuery({
-		queryKey: ['invoice', id],
-		queryFn: () =>
-			fetch(`${BACK_END_URL}/${id}`).then((res) => {
-				if (!res.ok) {
-					throw new Error('Invoice not found');
-				}
-				return res.json();
-			}),
+		queryKey: ['invoice', invoice_number],
+		queryFn: async () => {
+			const { data, error } = await supabase
+				.from('invoices')
+				.select('*')
+				.eq('invoice_number', invoice_number)
+				.single();
+
+			if (error) throw new Error('Invoice not found');
+			return data;
+		},
 		retry: false,
 	});
 
@@ -50,7 +52,7 @@ export function InvoiceDetails() {
 	const handleDeleteInvoice = () => setIsDeleteModalOpen(true);
 
 	const confirmDelete = () => {
-		deleteInvoice.mutate(id, {
+		deleteInvoice.mutate(invoice_number, {
 			onSuccess: () => {
 				setIsDeleteModalOpen(false);
 				navigate('/');
@@ -59,7 +61,7 @@ export function InvoiceDetails() {
 	};
 
 	const handleMarkAsPaid = () => {
-		markAsPaid.mutate(id, {
+		markAsPaid.mutate(invoice_number, {
 			onSuccess: () => {
 				navigate('/');
 			},
@@ -103,7 +105,7 @@ export function InvoiceDetails() {
 				isOpen={isDeleteModalOpen}
 				onClose={() => setIsDeleteModalOpen(false)}
 				onConfirm={confirmDelete}
-				invoiceId={id}
+				invoiceNumber={invoice_number}
 			/>
 		</div>
 	);

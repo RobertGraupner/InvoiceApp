@@ -8,17 +8,19 @@ export function Invoice({ invoice }) {
 				<div>
 					<h2 className='mb-2 text-[15px] font-bold tracking-[-0.25px] text-[#888EB0]'>
 						#
-						<span className='text-[#0C0E16] dark:text-white'>{invoice.id}</span>
+						<span className='text-[#0C0E16] dark:text-white'>
+							{invoice.invoice_number}
+						</span>
 					</h2>
 					<p className='text-xs font-medium tracking-[-0.1px] text-[#7E88C3] dark:text-[#DFE3FA]'>
 						{invoice.description}
 					</p>
 				</div>
 				<div className='pt-4 text-xs font-medium leading-5 tracking-[-0.1px] text-[#7E88C3] dark:text-[#DFE3FA] sm:pt-0 sm:text-right'>
-					<p>{invoice.senderAddress.street}</p>
-					<p>{invoice.senderAddress.city}</p>
-					<p>{invoice.senderAddress.postCode}</p>
-					<p>{invoice.senderAddress.country}</p>
+					<p>{invoice.sender_address.street}</p>
+					<p>{invoice.sender_address.city}</p>
+					<p>{invoice.sender_address.postCode}</p>
+					<p>{invoice.sender_address.country}</p>
 				</div>
 			</div>
 
@@ -29,7 +31,7 @@ export function Invoice({ invoice }) {
 							Invoice Date
 						</p>
 						<p className='text-[15px] font-bold dark:text-white'>
-							{formatDate(invoice.createdAt)}
+							{formatDate(invoice.created_at)}
 						</p>
 					</div>
 					<div className='flex flex-col gap-3'>
@@ -37,7 +39,7 @@ export function Invoice({ invoice }) {
 							Payment Due
 						</p>
 						<p className='text-[15px] font-bold dark:text-white'>
-							{formatDate(invoice.paymentDue)}
+							{formatDate(invoice.payment_due)}
 						</p>
 					</div>
 				</div>
@@ -48,17 +50,17 @@ export function Invoice({ invoice }) {
 						<p className='mb-2 text-[15px] font-bold tracking-[-0.25px] text-[#0C0E16] dark:text-white'>
 							{invoice.clientName}
 						</p>
-						<p>{invoice.clientAddress.street}</p>
-						<p>{invoice.clientAddress.city}</p>
-						<p>{invoice.clientAddress.postCode}</p>
-						<p>{invoice.clientAddress.country}</p>
+						<p>{invoice.client_address.street}</p>
+						<p>{invoice.client_address.city}</p>
+						<p>{invoice.client_address.postCode}</p>
+						<p>{invoice.client_address.country}</p>
 					</div>
 				</div>
 
 				<div className='col-span-2 flex flex-col gap-3 text-xs font-medium leading-5 tracking-[-0.1px] text-[#7E88C3] dark:text-[#DFE3FA] sm:col-span-1'>
 					<p className=''>Sent to</p>
 					<p className='mb-2 break-words text-[15px] font-bold text-[#0C0E16] dark:text-white'>
-						{invoice.clientEmail || '---'}
+						{invoice.client_email || '---'}
 					</p>
 				</div>
 			</div>
